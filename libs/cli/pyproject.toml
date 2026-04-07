@@ -46,7 +46,7 @@ test = [
 lint = [
     "ruff",
     "codespell",
-    "mypy",
+    "ty",
 ]
 dev = [
     {include-group = "test"},
