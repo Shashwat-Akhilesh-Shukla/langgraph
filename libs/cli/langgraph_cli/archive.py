@@ -22,6 +22,9 @@ _ALWAYS_EXCLUDE = [
     "node_modules/",
     ".tox/",
     ".mypy_cache/",
+    ".ty_cache/",
+    ".pyright_cache/",
+    ".ruff_cache/",
 ]
 
 

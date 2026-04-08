@@ -1565,7 +1565,6 @@ requires-dist = [
 dev = [
     { name = "codespell" },
     { name = "dataclasses-json" },
-    { name = "mypy" },
     { name = "numpy" },
     { name = "pandas" },
     { name = "pandas-stubs", specifier = ">=2.2.2.240807" },
@@ -1576,11 +1575,12 @@ dev = [
     { name = "pytest-watcher" },
     { name = "redis" },
     { name = "ruff" },
+    { name = "ty" },
 ]
 lint = [
     { name = "codespell" },
-    { name = "mypy" },
     { name = "ruff" },
+    { name = "ty" },
 ]
 test = [
     { name = "dataclasses-json" },
@@ -1618,18 +1618,18 @@ dev = [
     { name = "anyio" },
     { name = "codespell" },
     { name = "langgraph-checkpoint", editable = "../checkpoint" },
-    { name = "mypy" },
     { name = "psycopg", extras = ["binary"] },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "pytest-mock" },
     { name = "pytest-watcher" },
     { name = "ruff" },
+    { name = "ty" },
 ]
 lint = [
     { name = "codespell" },
-    { name = "mypy" },
     { name = "ruff" },
+    { name = "ty" },
 ]
 test = [
     { name = "anyio" },
@@ -1662,18 +1662,18 @@ requires-dist = [
 dev = [
     { name = "codespell" },
     { name = "langgraph-checkpoint", editable = "../checkpoint" },
-    { name = "mypy" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "pytest-mock" },
     { name = "pytest-retry", specifier = ">=1.7.0" },
     { name = "pytest-watcher" },
     { name = "ruff" },
+    { name = "ty" },
 ]
 lint = [
     { name = "codespell" },
-    { name = "mypy" },
     { name = "ruff" },
+    { name = "ty" },
 ]
 test = [
     { name = "langgraph-checkpoint", editable = "../checkpoint" },
@@ -1718,17 +1718,17 @@ dev = [
     { name = "codespell" },
     { name = "hatch", specifier = ">=1.16.2" },
     { name = "msgspec" },
-    { name = "mypy" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "pytest-mock" },
     { name = "pytest-watch" },
     { name = "ruff" },
+    { name = "ty" },
 ]
 lint = [
     { name = "codespell" },
-    { name = "mypy" },
     { name = "ruff" },
+    { name = "ty" },
 ]
 test = [
     { name = "msgspec" },
@@ -1761,7 +1761,6 @@ dev = [
     { name = "langgraph-checkpoint", editable = "../checkpoint" },
     { name = "langgraph-checkpoint-postgres", editable = "../checkpoint-postgres" },
     { name = "langgraph-checkpoint-sqlite", editable = "../checkpoint-sqlite" },
-    { name = "mypy" },
     { name = "psycopg-binary" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
@@ -1769,11 +1768,12 @@ dev = [
     { name = "pytest-watcher" },
     { name = "ruff" },
     { name = "syrupy" },
+    { name = "ty" },
 ]
 lint = [
     { name = "codespell" },
-    { name = "mypy" },
     { name = "ruff" },
+    { name = "ty" },
 ]
 test = [
     { name = "langchain-core" },
@@ -1824,7 +1824,6 @@ requires-dist = [
 dev = [
     { name = "codespell" },
     { name = "langgraph", editable = "." },
-    { name = "mypy", specifier = "==1.19.1" },
     { name = "pydantic", specifier = ">=2.12.4" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
@@ -1836,7 +1835,6 @@ dev = [
 ]
 lint = [
     { name = "codespell" },
-    { name = "mypy", specifier = "==1.19.1" },
     { name = "ruff", specifier = "==0.15.6" },
     { name = "starlette" },
     { name = "ty", specifier = "==0.0.23" },

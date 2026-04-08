@@ -72,6 +72,9 @@ class TestBuildIgnoreSpec:
         assert spec.match_file("node_modules/")
         assert spec.match_file(".tox/")
         assert spec.match_file(".mypy_cache/")
+        assert spec.match_file(".ty_cache/")
+        assert spec.match_file(".pyright_cache/")
+        assert spec.match_file(".ruff_cache/")
 
     def test_regular_file_not_excluded(self, tmp_path):
         spec = _build_ignore_spec(tmp_path)
