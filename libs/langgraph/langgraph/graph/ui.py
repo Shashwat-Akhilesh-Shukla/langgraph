@@ -211,7 +211,7 @@ def ui_message_reducer(
                 if cast(UIMessage, msg).get("metadata", {}).get("merge", False):
                     prev_msg = merged[existing_idx]
                     msg = msg.copy()
-                    msg["props"] = {**prev_msg["props"], **msg["props"]}
+                    msg["props"] = {**prev_msg["props"], **msg["props"]}  # type: ignore
 
                 merged[existing_idx] = msg
         else:

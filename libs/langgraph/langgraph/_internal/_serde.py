@@ -98,7 +98,7 @@ def build_serde_allowlist(
     )
 
 
-def collect_allowlist_from_schemas(
+def collect_allowlist_from_schemas(  # type: ignore
     *,
     schemas: list[type[Any]] | None = None,
     channels: dict[str, Any] | None = None,

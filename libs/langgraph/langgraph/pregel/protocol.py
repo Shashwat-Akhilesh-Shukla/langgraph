@@ -135,7 +135,7 @@ class PregelProtocol(Runnable[InputT, Any], Generic[StateT, ContextT, InputT, Ou
     ) -> Iterator[dict[str, Any] | Any]: ...
 
     @abstractmethod
-    def stream(
+    def stream(  # type: ignore
         self,
         input: InputT | Command | None,
         config: RunnableConfig | None = None,
@@ -179,7 +179,7 @@ class PregelProtocol(Runnable[InputT, Any], Generic[StateT, ContextT, InputT, Ou
     ) -> AsyncIterator[dict[str, Any] | Any]: ...
 
     @abstractmethod
-    def astream(
+    def astream(  # type: ignore
         self,
         input: InputT | Command | None,
         config: RunnableConfig | None = None,
@@ -219,7 +219,7 @@ class PregelProtocol(Runnable[InputT, Any], Generic[StateT, ContextT, InputT, Ou
     ) -> dict[str, Any] | Any: ...
 
     @abstractmethod
-    def invoke(
+    def invoke(  # type: ignore
         self,
         input: InputT | Command | None,
         config: RunnableConfig | None = None,
@@ -257,7 +257,7 @@ class PregelProtocol(Runnable[InputT, Any], Generic[StateT, ContextT, InputT, Ou
     ) -> dict[str, Any] | Any: ...
 
     @abstractmethod
-    async def ainvoke(
+    async def ainvoke(  # type: ignore
         self,
         input: InputT | Command | None,
         config: RunnableConfig | None = None,
@@ -284,5 +284,5 @@ class StreamProtocol:
         __call__: Callable[[StreamChunk], None],
         modes: set[StreamMode],
     ) -> None:
-        self.__call__ = cast(Callable[[Self, StreamChunk], None], __call__)
+        self.__call__ = cast(Callable[[Self, StreamChunk], None], __call__)  # type: ignore
         self.modes = modes

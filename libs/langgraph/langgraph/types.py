@@ -146,7 +146,7 @@ class TaskPayload(TypedDict):
     """Name of the node being executed."""
     input: Any
     """Input data passed to the task."""
-    triggers: list[str]
+    triggers: list[str]  # type: ignore
     """List of triggers that caused this task to be executed (e.g. channel writes)."""
 
 
@@ -179,11 +179,11 @@ class CheckpointTask(TypedDict):
     """Unique identifier for this task."""
     name: str
     """Name of the node being executed."""
-    error: NotRequired[str]
+    error: NotRequired[str]  # type: ignore
     """Error message, present only if the task failed."""
     result: NotRequired[Any]
     """Result of the task, present only if the task completed successfully."""
-    interrupts: NotRequired[list[dict]]
+    interrupts: NotRequired[list[dict]]  # type: ignore
     """List of interrupts, present when the task has been interrupted or completed."""
     state: StateSnapshot | RunnableConfig | None
     """Snapshot of the subgraph state, or a `RunnableConfig` pointing to it. `None` if not a subgraph."""
@@ -202,7 +202,7 @@ class CheckpointPayload(TypedDict, Generic[StateT]):
     """Names of the nodes scheduled to execute next."""
     parent_config: RunnableConfig | None
     """Configuration of the parent checkpoint, or `None` if this is the first checkpoint."""
-    tasks: list[CheckpointTask]
+    tasks: list[CheckpointTask]  # type: ignore
     """List of tasks associated with this checkpoint."""
 
 
@@ -377,7 +377,7 @@ class GraphOutput(Generic[OutputT]):
         if key == _INTERRUPT_KEY:
             return self.interrupts
         if isinstance(self.value, dict):
-            return self.value[key]
+            return self.value[key]  # type: ignore
         try:
             return getattr(self.value, key)
         except AttributeError:
@@ -650,7 +650,7 @@ N = TypeVar("N", bound=Hashable)
 
 
 @dataclass(**_DC_KWARGS)
-class Command(Generic[N], ToolOutputMixin):
+class Command(Generic[N], ToolOutputMixin):  # type: ignore
     """One or more commands to update the graph's state and send messages to nodes.
 
     Args:
@@ -684,7 +684,7 @@ class Command(Generic[N], ToolOutputMixin):
         )
         return f"Command({contents})"
 
-    def _update_as_tuples(self) -> Sequence[tuple[str, Any]]:
+    def _update_as_tuples(self) -> Sequence[tuple[str, Any]]:  # type: ignore
         if isinstance(self.update, dict):
             return list(self.update.items())
         elif isinstance(self.update, (list, tuple)) and all(

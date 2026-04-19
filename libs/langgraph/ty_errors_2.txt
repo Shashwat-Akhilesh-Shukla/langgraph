@@ -1,0 +1,2116 @@
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+  --> langgraph\_internal\_config.py:61:23
+   |
+59 | def patch_checkpoint_map(
+60 |     config: RunnableConfig | None, metadata: CheckpointMetadata | None
+61 | ) -> RunnableConfig:  # type: ignore
+   |                       ^^^^^^^^^^^^^^
+62 |     if config is None:
+63 |         return config
+   |
+help: Remove the unused suppression comment
+58 |
+59 | def patch_checkpoint_map(
+60 |     config: RunnableConfig | None, metadata: CheckpointMetadata | None
+   - ) -> RunnableConfig:  # type: ignore
+61 + ) -> RunnableConfig:
+62 |     if config is None:
+63 |         return config
+64 |     elif parents := (metadata.get("parents") if metadata else None):
+
+error[invalid-return-type]: Return type does not match returned value
+  --> langgraph\_internal\_config.py:61:6
+   |
+59 | def patch_checkpoint_map(
+60 |     config: RunnableConfig | None, metadata: CheckpointMetadata | None
+61 | ) -> RunnableConfig:  # type: ignore
+   |      -------------- Expected `RunnableConfig` because of return type
+62 |     if config is None:
+63 |         return config
+   |                ^^^^^^ expected `RunnableConfig`, found `None`
+64 |     elif parents := (metadata.get("parents") if metadata else None):
+65 |         conf = config[CONF]
+   |
+info: rule `invalid-return-type` is enabled by default
+
+error[invalid-key]: TypedDict `RunnableConfig` can only be subscripted with a string literal key, got key of type `str`.
+   --> langgraph\_internal\_config.py:101:26
+    |
+ 99 |                     base[key] = {**base_value, **value}  # type: ignore
+100 |                 else:
+101 |                     base[key] = value  # type: ignore[literal-required]
+    |                          ^^^
+102 |             elif key == "tags":
+103 |                 if base_value := base.get(key):
+    |
+info: rule `invalid-key` is enabled by default
+
+error[invalid-key]: TypedDict `RunnableConfig` can only be subscripted with a string literal key, got key of type `str & ~Literal["metadata"]`.
+   --> langgraph\_internal\_config.py:106:26
+    |
+104 |                     base[key] = [*base_value, *value]  # type: ignore
+105 |                 else:
+106 |                     base[key] = value  # type: ignore[literal-required]
+    |                          ^^^
+107 |             elif key == CONF:
+108 |                 if base_value := base.get(key):
+    |
+info: rule `invalid-key` is enabled by default
+
+error[invalid-key]: TypedDict `RunnableConfig` can only be subscripted with a string literal key, got key of type `str & ~Literal["metadata"] & ~Literal["tags"]`.
+   --> langgraph\_internal\_config.py:109:26
+    |
+107 |             elif key == CONF:
+108 |                 if base_value := base.get(key):
+109 |                     base[key] = {**base_value, **value}  # type: ignore[dict-item]
+    |                          ^^^
+110 |                 else:
+111 |                     base[key] = value  # type: ignore
+    |
+info: rule `invalid-key` is enabled by default
+
+error[invalid-argument-type]: Argument expression after ** must be a mapping type
+   --> langgraph\_internal\_config.py:109:50
+    |
+107 |             elif key == CONF:
+108 |                 if base_value := base.get(key):
+109 |                     base[key] = {**base_value, **value}  # type: ignore[dict-item]
+    |                                                  ^^^^^ Found `~AlwaysFalsy`
+110 |                 else:
+111 |                     base[key] = value  # type: ignore
+    |
+info: rule `invalid-argument-type` is enabled by default
+
+error[invalid-key]: TypedDict `RunnableConfig` can only be subscripted with a string literal key, got key of type `str & ~Literal["metadata"] & ~Literal["tags"] & ~Literal["configurable"] & ~Literal["callbacks"] & ~Literal["recursion_limit"]`.
+   --> langgraph\_internal\_config.py:145:22
+    |
+143 |                     base["recursion_limit"] = config["recursion_limit"]
+144 |             else:
+145 |                 base[key] = config[key]  # type: ignore[literal-required]
+    |                      ^^^
+146 |     if CONF not in base:
+147 |         base[CONF] = {}  # type: ignore
+    |
+info: rule `invalid-key` is enabled by default
+
+error[invalid-key]: TypedDict `RunnableConfig` can only be subscripted with a string literal key, got key of type `str`
+   --> langgraph\_internal\_config.py:145:36
+    |
+143 |                     base["recursion_limit"] = config["recursion_limit"]
+144 |             else:
+145 |                 base[key] = config[key]  # type: ignore[literal-required]
+    |                                    ^^^
+146 |     if CONF not in base:
+147 |         base[CONF] = {}  # type: ignore
+    |
+info: rule `invalid-key` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\_internal\_config.py:284:30
+    |
+282 |         RunnableConfig: The merged and ensured config.
+283 |     """
+284 |     empty = RunnableConfig(  # type: ignore
+    |                              ^^^^^^^^^^^^^^
+285 |         tags=[],
+286 |         metadata=ChainMap(),
+    |
+help: Remove the unused suppression comment
+281 |     Returns:
+282 |         RunnableConfig: The merged and ensured config.
+283 |     """
+    -     empty = RunnableConfig(  # type: ignore
+284 +     empty = RunnableConfig(
+285 |         tags=[],
+286 |         metadata=ChainMap(),
+287 |         callbacks=None,
+
+error[invalid-argument-type]: Invalid argument to key "metadata" with declared type `dict[str, Any]` on TypedDict `RunnableConfig`
+   --> langgraph\_internal\_config.py:284:13
+    |
+282 |         RunnableConfig: The merged and ensured config.
+283 |     """
+284 |     empty = RunnableConfig(  # type: ignore
+    |             -------------- TypedDict `RunnableConfig`
+285 |         tags=[],
+286 |         metadata=ChainMap(),
+    |         ---------^^^^^^^^^^
+    |         |        |
+    |         |        value of type `ChainMap[Unknown, Unknown]`
+    |         key has declared type `dict[str, Any]`
+287 |         callbacks=None,
+288 |         recursion_limit=DEFAULT_RECURSION_LIMIT,
+    |
+info: Item declaration
+  --> .venv\Lib\site-packages\langchain_core\runnables\config.py:78:5
+   |
+76 |     """
+77 |
+78 |     metadata: dict[str, Any]  # type: ignore
+   |     ------------------------ Item declared here
+79 |     """Metadata for this call and any sub-calls (e.g. a Chain calling an LLM).
+   |
+info: rule `invalid-argument-type` is enabled by default
+
+error[unresolved-attribute]: Object of type `object` has no attribute `copy`
+   --> langgraph\_internal\_config.py:294:20
+    |
+292 |         empty.update(
+293 |             {  # type: ignore
+294 |                 k: v.copy() if k in COPIABLE_KEYS else v  # type: ignore[attr-defined]
+    |                    ^^^^^^
+295 |                 for k, v in var_config.items()
+296 |                 if _is_not_empty(v)
+    |
+info: rule `unresolved-attribute` is enabled by default
+
+error[invalid-key]: TypedDict `RunnableConfig` can only be subscripted with a string literal key, got key of type `str & ~Literal["configurable"]`.
+   --> langgraph\_internal\_config.py:307:27
+    |
+305 |                     empty[k] = cast(dict, v).copy()  # type: ignore
+306 |                 else:
+307 |                     empty[k] = v  # type: ignore[literal-required]
+    |                           ^
+308 |         for k, v in config.items():
+309 |             if _is_not_empty(v) and k not in CONFIG_KEYS:
+    |
+info: rule `invalid-key` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\_internal\_future.py:127:76
+    |
+127 | def chain_future(source: AnyFuture, destination: AnyFuture) -> AnyFuture:  # type: ignore
+    |                                                                            ^^^^^^^^^^^^^^
+128 |     # adapted from asyncio.run_coroutine_threadsafe
+129 |     try:
+    |
+help: Remove the unused suppression comment
+124 |     source.add_done_callback(_call_set_state)
+125 |
+126 |
+    - def chain_future(source: AnyFuture, destination: AnyFuture) -> AnyFuture:  # type: ignore
+127 + def chain_future(source: AnyFuture, destination: AnyFuture) -> AnyFuture:
+128 |     # adapted from asyncio.run_coroutine_threadsafe
+129 |     try:
+130 |         _chain_future(source, destination)
+
+error[unresolved-attribute]: Object of type `<super: <class 'BaseModel'>, <class 'BaseModel'>>` has no attribute `schema`
+  --> langgraph\_internal\_pydantic.py:75:19
+   |
+73 |     ) -> dict[str, Any]:
+74 |         # Complains about schema not being defined in superclass
+75 |         schema_ = super(cls, cls).schema(  # type: ignore[misc]
+   |                   ^^^^^^^^^^^^^^^^^^^^^^
+76 |             by_alias=by_alias, ref_template=ref_template
+77 |         )
+   |
+info: rule `unresolved-attribute` is enabled by default
+
+error[unresolved-attribute]: Object of type `<super: <class 'BaseModel'>, <class 'BaseModel'>>` has no attribute `model_json_schema`
+  --> langgraph\_internal\_pydantic.py:89:19
+   |
+87 |     ) -> dict[str, Any]:
+88 |         # Complains about model_json_schema not being defined in superclass
+89 |         schema_ = super(cls, cls).model_json_schema(  # type: ignore[misc]
+   |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+90 |             by_alias=by_alias,
+91 |             ref_template=ref_template,
+   |
+info: rule `unresolved-attribute` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\_internal\_runnable.py:257:20
+    |
+255 |     """A much simpler version of RunnableLambda that requires sync and async functions."""
+256 |
+257 |     def __init__(  # type: ignore
+    |                    ^^^^^^^^^^^^^^
+258 |         self,
+259 |         func: Callable[..., Any | Runnable] | None,
+    |
+help: Remove the unused suppression comment
+254 | class RunnableCallable(Runnable):
+255 |     """A much simpler version of RunnableLambda that requires sync and async functions."""
+256 |
+    -     def __init__(  # type: ignore
+257 +     def __init__(
+258 |         self,
+259 |         func: Callable[..., Any | Runnable] | None,
+260 |         afunc: Callable[..., Awaitable[Any | Runnable]] | None = None,
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\_internal\_runnable.py:501:26
+    |
+501 | def coerce_to_runnable(  # type: ignore
+    |                          ^^^^^^^^^^^^^^
+502 |     thing: RunnableLike, *, name: str | None, trace: bool
+503 | ) -> Runnable:
+    |
+help: Remove the unused suppression comment
+498 |     )
+499 |
+500 |
+    - def coerce_to_runnable(  # type: ignore
+501 + def coerce_to_runnable(
+502 |     thing: RunnableLike, *, name: str | None, trace: bool
+503 | ) -> Runnable:
+504 |     """Coerce a runnable-like object into a Runnable.
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\_internal\_runnable.py:542:20
+    |
+540 |     """
+541 |
+542 |     def __init__(  # type: ignore
+    |                    ^^^^^^^^^^^^^^
+543 |         self,
+544 |         *steps: RunnableLike,
+    |
+help: Remove the unused suppression comment
+539 |     LangGraph.
+540 |     """
+541 |
+    -     def __init__(  # type: ignore
+542 +     def __init__(
+543 |         self,
+544 |         *steps: RunnableLike,
+545 |         name: str | None = None,
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\_internal\_serde.py:101:38
+    |
+101 | def collect_allowlist_from_schemas(  # type: ignore
+    |                                      ^^^^^^^^^^^^^^
+102 |     *,
+103 |     schemas: list[type[Any]] | None = None,
+    |
+help: Remove the unused suppression comment
+98  |     )
+99  |
+100 |
+    - def collect_allowlist_from_schemas(  # type: ignore
+101 + def collect_allowlist_from_schemas(
+102 |     *,
+103 |     schemas: list[type[Any]] | None = None,
+104 |     channels: dict[str, Any] | None = None,
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\channels\binop.py:125:30
+    |
+123 |         return True
+124 |
+125 |     def get(self) -> Value:  # type: ignore
+    |                              ^^^^^^^^^^^^^^
+126 |         if self.value is MISSING:
+127 |             raise EmptyChannelError()
+    |
+help: Remove the unused suppression comment
+122 |                 self.value = self.operator(self.value, value)  # type: ignore
+123 |         return True
+124 |
+    -     def get(self) -> Value:  # type: ignore
+125 +     def get(self) -> Value:
+126 |         if self.value is MISSING:
+127 |             raise EmptyChannelError()
+128 |         return self.value
+
+error[invalid-return-type]: Return type does not match returned value
+   --> langgraph\channels\binop.py:125:22
+    |
+123 |         return True
+124 |
+125 |     def get(self) -> Value:  # type: ignore
+    |                      ----- Expected `Value@BinaryOperatorAggregate` because of return type
+126 |         if self.value is MISSING:
+127 |             raise EmptyChannelError()
+128 |         return self.value
+    |                ^^^^^^^^^^ expected `Value@BinaryOperatorAggregate`, found `object`
+129 |
+130 |     def is_available(self) -> bool:
+    |
+info: rule `invalid-return-type` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\channels\binop.py:133:37
+    |
+131 |         return self.value is not MISSING
+132 |
+133 |     def checkpoint(self) -> Value:  # type: ignore
+    |                                     ^^^^^^^^^^^^^^
+134 |         return self.value
+    |
+help: Remove the unused suppression comment
+130 |     def is_available(self) -> bool:
+131 |         return self.value is not MISSING
+132 |
+    -     def checkpoint(self) -> Value:  # type: ignore
+133 +     def checkpoint(self) -> Value:
+134 |         return self.value
+
+error[invalid-return-type]: Return type does not match returned value
+   --> langgraph\channels\binop.py:133:29
+    |
+131 |         return self.value is not MISSING
+132 |
+133 |     def checkpoint(self) -> Value:  # type: ignore
+    |                             ----- Expected `Value@BinaryOperatorAggregate` because of return type
+134 |         return self.value
+    |                ^^^^^^^^^^ expected `Value@BinaryOperatorAggregate`, found `object`
+    |
+info: rule `invalid-return-type` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+  --> langgraph\channels\named_barrier_value.py:69:30
+   |
+67 |         return updated
+68 |
+69 |     def get(self) -> Value:  # type: ignore
+   |                              ^^^^^^^^^^^^^^
+70 |         if self.seen != self.names:
+71 |             raise EmptyChannelError()
+   |
+help: Remove the unused suppression comment
+66 |                 )
+67 |         return updated
+68 |
+   -     def get(self) -> Value:  # type: ignore
+69 +     def get(self) -> Value:
+70 |         if self.seen != self.names:
+71 |             raise EmptyChannelError()
+72 |         return None
+
+error[invalid-return-type]: Return type does not match returned value
+  --> langgraph\channels\named_barrier_value.py:69:22
+   |
+67 |         return updated
+68 |
+69 |     def get(self) -> Value:  # type: ignore
+   |                      ----- Expected `Value@NamedBarrierValue` because of return type
+70 |         if self.seen != self.names:
+71 |             raise EmptyChannelError()
+72 |         return None
+   |                ^^^^ expected `Value@NamedBarrierValue`, found `None`
+73 |
+74 |     def is_available(self) -> bool:
+   |
+info: rule `invalid-return-type` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\channels\named_barrier_value.py:147:30
+    |
+145 |         return updated
+146 |
+147 |     def get(self) -> Value:  # type: ignore
+    |                              ^^^^^^^^^^^^^^
+148 |         if not self.finished or self.seen != self.names:
+149 |             raise EmptyChannelError()
+    |
+help: Remove the unused suppression comment
+144 |                 )
+145 |         return updated
+146 |
+    -     def get(self) -> Value:  # type: ignore
+147 +     def get(self) -> Value:
+148 |         if not self.finished or self.seen != self.names:
+149 |             raise EmptyChannelError()
+150 |         return None
+
+error[invalid-return-type]: Return type does not match returned value
+   --> langgraph\channels\named_barrier_value.py:147:22
+    |
+145 |         return updated
+146 |
+147 |     def get(self) -> Value:  # type: ignore
+    |                      ----- Expected `Value@NamedBarrierValueAfterFinish` because of return type
+148 |         if not self.finished or self.seen != self.names:
+149 |             raise EmptyChannelError()
+150 |         return None
+    |                ^^^^ expected `Value@NamedBarrierValueAfterFinish`, found `None`
+151 |
+152 |     def is_available(self) -> bool:
+    |
+info: rule `invalid-return-type` is enabled by default
+
+error[invalid-argument-type]: Argument to function `__new__` is incorrect
+  --> langgraph\func\__init__.py:61:53
+   |
+59 |                 # NOTE: we're modifying the instance method to avoid modifying
+60 |                 # the original class method in case it's shared across multiple tasks
+61 |                 instance_method = functools.partial(func.__func__, func.__self__)  # type: ignore [union-attr]
+   |                                                     ^^^^^^^^^^^^^ Expected `(...) -> Unknown`, found `object`
+62 |                 instance_method.__name__ = name  # type: ignore [attr-defined]
+63 |                 func = instance_method  # type: ignore
+   |
+info: Function defined here
+   --> stdlib\functools.pyi:317:9
+    |
+315 |         """dictionary of keyword arguments to future partial calls"""
+316 |
+317 |     def __new__(cls, func: Callable[..., _T], /, *args: Any, **kwargs: Any) -> Self: ...
+    |         ^^^^^^^      ----------------------- Parameter declared here
+318 |     def __call__(self, /, *args: Any, **kwargs: Any) -> _T:
+319 |         """Call self as a function."""
+    |
+info: rule `invalid-argument-type` is enabled by default
+
+error[unresolved-attribute]: Object of type `(((**P@_TaskFunction) -> Awaitable[T@_TaskFunction]) & <Protocol with members '__func__'>) | (((**P@_TaskFunction) -> T@_TaskFunction) & <Protocol with members '__func__'>)` has no attribute `__self__`
+  --> langgraph\func\__init__.py:61:68
+   |
+59 |                 # NOTE: we're modifying the instance method to avoid modifying
+60 |                 # the original class method in case it's shared across multiple tasks
+61 |                 instance_method = functools.partial(func.__func__, func.__self__)  # type: ignore [union-attr]
+   |                                                                    ^^^^^^^^^^^^^
+62 |                 instance_method.__name__ = name  # type: ignore [attr-defined]
+63 |                 func = instance_method  # type: ignore
+   |
+info: rule `unresolved-attribute` is enabled by default
+
+error[unresolved-attribute]: Unresolved attribute `__name__` on type `partial[_T@partial]`
+  --> langgraph\func\__init__.py:62:17
+   |
+60 |                 # the original class method in case it's shared across multiple tasks
+61 |                 instance_method = functools.partial(func.__func__, func.__self__)  # type: ignore [union-attr]
+62 |                 instance_method.__name__ = name  # type: ignore [attr-defined]
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^
+63 |                 func = instance_method  # type: ignore
+64 |             else:
+   |
+info: rule `unresolved-attribute` is enabled by default
+
+error[invalid-argument-type]: Argument to bound method `__init__` is incorrect
+   --> langgraph\graph\message.py:304:26
+    |
+302 |             stacklevel=2,
+303 |         )
+304 |         super().__init__(Annotated[list[AnyMessage], add_messages])  # type: ignore[arg-type]
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected `type[Unknown]`, found `<special-form 'typing.Annotated[list[AIMessage | HumanMessage | ChatMessage | ... omitted 3 union elements], <metadata>]'>`
+    |
+info: Method defined here
+   --> langgraph\graph\state.py:200:9
+    |
+198 |     output_schema: type[OutputT]
+199 |
+200 |     def __init__(  # type: ignore
+    |         ^^^^^^^^
+201 |         self,
+202 |         state_schema: type[StateT],
+    |         -------------------------- Parameter declared here
+203 |         context_schema: type[ContextT] | None = None,
+204 |         *,
+    |
+info: rule `invalid-argument-type` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\graph\message.py:311:78
+    |
+311 | def _format_messages(messages: Sequence[BaseMessage]) -> list[BaseMessage]:  # type: ignore
+    |                                                                              ^^^^^^^^^^^^^^
+312 |     try:
+313 |         from langchain_core.messages import convert_to_openai_messages
+    |
+help: Remove the unused suppression comment
+308 |     messages: Annotated[list[AnyMessage], add_messages]
+309 |
+310 |
+    - def _format_messages(messages: Sequence[BaseMessage]) -> list[BaseMessage]:  # type: ignore
+311 + def _format_messages(messages: Sequence[BaseMessage]) -> list[BaseMessage]:
+312 |     try:
+313 |         from langchain_core.messages import convert_to_openai_messages
+314 |     except ImportError:
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\graph\state.py:108:61
+    |
+108 | def _get_node_name(node: StateNode[Any, ContextT]) -> str:  # type: ignore
+    |                                                             ^^^^^^^^^^^^^^
+109 |     try:
+110 |         return getattr(node, "__name__", node.__class__.__name__)
+    |
+help: Remove the unused suppression comment
+105 |     )
+106 |
+107 |
+    - def _get_node_name(node: StateNode[Any, ContextT]) -> str:  # type: ignore
+108 + def _get_node_name(node: StateNode[Any, ContextT]) -> str:
+109 |     try:
+110 |         return getattr(node, "__name__", node.__class__.__name__)
+111 |     except AttributeError:
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\graph\state.py:200:20
+    |
+198 |     output_schema: type[OutputT]
+199 |
+200 |     def __init__(  # type: ignore
+    |                    ^^^^^^^^^^^^^^
+201 |         self,
+202 |         state_schema: type[StateT],
+    |
+help: Remove the unused suppression comment
+197 |     input_schema: type[InputT]
+198 |     output_schema: type[OutputT]
+199 |
+    -     def __init__(  # type: ignore
+200 +     def __init__(
+201 |         self,
+202 |         state_schema: type[StateT],
+203 |         context_schema: type[ContextT] | None = None,
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\graph\state.py:431:20
+    |
+430 |     @overload
+431 |     def add_node(  # type: ignore
+    |                    ^^^^^^^^^^^^^^
+432 |         self,
+433 |         node: str,
+    |
+help: Remove the unused suppression comment
+428 |         ...
+429 |
+430 |     @overload
+    -     def add_node(  # type: ignore
+431 +     def add_node(
+432 |         self,
+433 |         node: str,
+434 |         action: StateNode[NodeInputT, ContextT],
+
+error[invalid-argument-type]: Argument to function `coerce_to_runnable` is incorrect
+   --> langgraph\graph\state.py:753:36
+    |
+751 |         if input_schema is not None:
+752 |             self.nodes[node] = StateNodeSpec[NodeInputT, ContextT](
+753 |                 coerce_to_runnable(action, name=node, trace=False),  # type: ignore[arg-type]
+    |                                    ^^^^^^ Expected `Runnable[Unknown, Unknown] | ((Unknown, /) -> Unknown) | ((Unknown, /) -> Awaitable[Unknown]) | ... omitted 13 union elements`, found `_Node[NodeInputT@add_node] | _NodeWithConfig[NodeInputT@add_node] | _NodeWithWriter[NodeInputT@add_node] | ... omitted 8 union elements`
+754 |                 metadata,
+755 |                 input_schema=input_schema,
+    |
+info: Element `_NodeWithRuntime[NodeInputT@add_node, ContextT@StateGraph]` of this union is not assignable to `Runnable[Unknown, Unknown] | ((Unknown, /) -> Unknown) | ((Unknown, /) -> Awaitable[Unknown]) | ... omitted 13 union elements`
+info: Function defined here
+   --> langgraph\_internal\_runnable.py:501:5
+    |
+501 | def coerce_to_runnable(  # type: ignore
+    |     ^^^^^^^^^^^^^^^^^^
+502 |     thing: RunnableLike, *, name: str | None, trace: bool
+    |     ------------------- Parameter declared here
+503 | ) -> Runnable:
+504 |     """Coerce a runnable-like object into a Runnable.
+    |
+info: rule `invalid-argument-type` is enabled by default
+
+error[invalid-argument-type]: Argument to function `coerce_to_runnable` is incorrect
+   --> langgraph\graph\state.py:763:36
+    |
+761 |         elif inferred_input_schema is not None:
+762 |             self.nodes[node] = StateNodeSpec(
+763 |                 coerce_to_runnable(action, name=node, trace=False),  # type: ignore[arg-type]
+    |                                    ^^^^^^ Expected `Runnable[Unknown, Unknown] | ((Unknown, /) -> Unknown) | ((Unknown, /) -> Awaitable[Unknown]) | ... omitted 13 union elements`, found `_Node[NodeInputT@add_node] | _NodeWithConfig[NodeInputT@add_node] | _NodeWithWriter[NodeInputT@add_node] | ... omitted 8 union elements`
+764 |                 metadata,
+765 |                 input_schema=inferred_input_schema,
+    |
+info: Element `_NodeWithRuntime[NodeInputT@add_node, ContextT@StateGraph]` of this union is not assignable to `Runnable[Unknown, Unknown] | ((Unknown, /) -> Unknown) | ((Unknown, /) -> Awaitable[Unknown]) | ... omitted 13 union elements`
+info: Function defined here
+   --> langgraph\_internal\_runnable.py:501:5
+    |
+501 | def coerce_to_runnable(  # type: ignore
+    |     ^^^^^^^^^^^^^^^^^^
+502 |     thing: RunnableLike, *, name: str | None, trace: bool
+    |     ------------------- Parameter declared here
+503 | ) -> Runnable:
+504 |     """Coerce a runnable-like object into a Runnable.
+    |
+info: rule `invalid-argument-type` is enabled by default
+
+error[invalid-argument-type]: Argument to function `coerce_to_runnable` is incorrect
+   --> langgraph\graph\state.py:773:36
+    |
+771 |         else:
+772 |             self.nodes[node] = StateNodeSpec[StateT, ContextT](
+773 |                 coerce_to_runnable(action, name=node, trace=False),  # type: ignore[arg-type]
+    |                                    ^^^^^^ Expected `Runnable[Unknown, Unknown] | ((Unknown, /) -> Unknown) | ((Unknown, /) -> Awaitable[Unknown]) | ... omitted 13 union elements`, found `_Node[NodeInputT@add_node] | _NodeWithConfig[NodeInputT@add_node] | _NodeWithWriter[NodeInputT@add_node] | ... omitted 8 union elements`
+774 |                 metadata,
+775 |                 input_schema=self.state_schema,
+    |
+info: Element `_NodeWithRuntime[NodeInputT@add_node, ContextT@StateGraph]` of this union is not assignable to `Runnable[Unknown, Unknown] | ((Unknown, /) -> Unknown) | ((Unknown, /) -> Awaitable[Unknown]) | ... omitted 13 union elements`
+info: Function defined here
+   --> langgraph\_internal\_runnable.py:501:5
+    |
+501 | def coerce_to_runnable(  # type: ignore
+    |     ^^^^^^^^^^^^^^^^^^
+502 |     thing: RunnableLike, *, name: str | None, trace: bool
+    |     ------------------- Parameter declared here
+503 | ) -> Runnable:
+504 |     """Coerce a runnable-like object into a Runnable.
+    |
+info: rule `invalid-argument-type` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\graph\state.py:788:76
+    |
+786 |         return self
+787 |
+788 |     def add_edge(self, start_key: str | list[str], end_key: str) -> Self:  # type: ignore
+    |                                                                            ^^^^^^^^^^^^^^
+789 |         """Add a directed edge from the start node (or list of start nodes) to the end node.
+    |
+help: Remove the unused suppression comment
+785 |
+786 |         return self
+787 |
+    -     def add_edge(self, start_key: str | list[str], end_key: str) -> Self:  # type: ignore
+788 +     def add_edge(self, start_key: str | list[str], end_key: str) -> Self:
+789 |         """Add a directed edge from the start node (or list of start nodes) to the end node.
+790 |
+791 |         When a single start node is provided, the graph will wait for that node to complete
+
+error[invalid-argument-type]: Argument to bound method `__init__` is incorrect
+    --> langgraph\graph\state.py:1334:17
+     |
+1332 |                 retry_policy=node.retry_policy,
+1333 |                 cache_policy=node.cache_policy,
+1334 |                 bound=node.runnable,  # type: ignore[arg-type]
+     |                 ^^^^^^^^^^^^^^^^^^^ Expected `Runnable[Any, Any] | None`, found `_Node[Any] | _NodeWithConfig[Any] | _NodeWithWriter[Any] | ... omitted 7 union elements`
+1335 |             )
+1336 |         else:
+     |
+info: Union element `_Node[Any]`, and 8 more union elements, are not assignable to `Runnable[Any, Any] | None`
+info: Method defined here
+   --> langgraph\pregel\_read.py:135:9
+    |
+133 |     """Subgraphs used by the node."""
+134 |
+135 |     def __init__(  # type: ignore
+    |         ^^^^^^^^
+136 |         self,
+137 |         *,
+    |
+   ::: langgraph\pregel\_read.py:144:9
+    |
+142 |         tags: list[str] | None = None,
+143 |         metadata: Mapping[str, Any] | None = None,
+144 |         bound: Runnable[Any, Any] | None = None,
+    |         --------------------------------------- Parameter declared here
+145 |         retry_policy: RetryPolicy | Sequence[RetryPolicy] | None = None,
+146 |         cache_policy: CachePolicy | None = None,
+    |
+info: rule `invalid-argument-type` is enabled by default
+
+error[unsupported-operator]: Unsupported `>` operation
+   --> langgraph\pregel\_algo.py:152:9
+    |
+150 |     # interrupt if any channel has been updated since last interrupt
+151 |     any_updates_since_prev_interrupt = any(
+152 |         version > seen.get(chan, null_version)  # type: ignore[operator]
+    |         -------^^^----------------------------
+    |         |         |
+    |         |         Has type `str | int | float | None`
+    |         Has type `str | int | float`
+153 |         for chan, version in checkpoint["channel_versions"].items()
+154 |     )
+    |
+info: Operation fails because operator `>` is not supported between objects of type `str` and `int`
+info: rule `unsupported-operator` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\pregel\_algo.py:996:48
+    |
+994 |             ),
+995 |         )
+996 |         additional_config: RunnableConfig = {  # type: ignore
+    |                                                ^^^^^^^^^^^^^^
+997 |             "metadata": metadata,
+998 |             "tags": proc.tags,
+    |
+help: Remove the unused suppression comment
+993 |                 run_id=str(rid) if (rid := config.get("run_id")) else None,
+994 |             ),
+995 |         )
+    -         additional_config: RunnableConfig = {  # type: ignore
+996 +         additional_config: RunnableConfig = {
+997 |             "metadata": metadata,
+998 |             "tags": proc.tags,
+999 |         }
+
+error[invalid-argument-type]: Invalid argument to key "tags" with declared type `list[str]` on TypedDict `RunnableConfig`
+    --> langgraph\pregel\_algo.py:996:45
+     |
+ 994 |               ),
+ 995 |           )
+ 996 |           additional_config: RunnableConfig = {  # type: ignore
+     |  _____________________________________________-
+ 997 | |             "metadata": metadata,
+ 998 | |             "tags": proc.tags,
+     | |             ------  ^^^^^^^^^ value of type `Sequence[str] | None`
+     | |             |
+     | |             key has declared type `list[str]`
+ 999 | |         }
+     | |_________- TypedDict `RunnableConfig`
+1000 |           return PregelExecutableTask(
+1001 |               packet.node,
+     |
+info: Item declaration
+  --> .venv\Lib\site-packages\langchain_core\runnables\config.py:72:5
+   |
+70 |     """
+71 |
+72 |     tags: list[str]  # type: ignore
+   |     --------------- Item declared here
+73 |     """Tags for this call and any sub-calls (e.g. a Chain calling an LLM).
+   |
+info: rule `invalid-argument-type` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+    --> langgraph\pregel\_algo.py:1051:17
+     |
+1049 | def checkpoint_null_version(
+1050 |     checkpoint: Checkpoint,
+1051 | ) -> V | None:  # type: ignore
+     |                 ^^^^^^^^^^^^^^
+1052 |     """Get the null version for the checkpoint, if available."""
+1053 |     for version in checkpoint["channel_versions"].values():
+     |
+help: Remove the unused suppression comment
+1048 |
+1049 | def checkpoint_null_version(
+1050 |     checkpoint: Checkpoint,
+     - ) -> V | None:  # type: ignore
+1051 + ) -> V | None:
+1052 |     """Get the null version for the checkpoint, if available."""
+1053 |     for version in checkpoint["channel_versions"].values():
+1054 |         return type(version)()
+
+error[invalid-return-type]: Return type does not match returned value
+    --> langgraph\pregel\_algo.py:1051:6
+     |
+1049 | def checkpoint_null_version(
+1050 |     checkpoint: Checkpoint,
+1051 | ) -> V | None:  # type: ignore
+     |      -------- Expected `V@checkpoint_null_version | None` because of return type
+1052 |     """Get the null version for the checkpoint, if available."""
+1053 |     for version in checkpoint["channel_versions"].values():
+1054 |         return type(version)()
+     |                ^^^^^^^^^^^^^^^ expected `V@checkpoint_null_version | None`, found `str | int | float`
+1055 |     return None
+     |
+info: rule `invalid-return-type` is enabled by default
+
+error[unsupported-operator]: Unsupported `>` operation
+    --> langgraph\pregel\_algo.py:1071:50
+     |
+1069 |        else:
+1070 |            for chan in proc.triggers:
+1071 |                if channels[chan].is_available() and versions.get(  # type: ignore[operator]
+     |   __________________________________________________-
+     |  |__________________________________________________|
+1072 | ||                 chan, null_version
+1073 | ||             ) > seen.get(chan, null_version):
+     | ||             -   ---------------------------^
+     | ||_____________|______________________________|
+     |  |_____________|                              Both operands have type `str | int | float`
+     |
+1074 |                    return True
+1075 |        return False
+     |
+info: Operation fails because operator `>` is not supported between objects of type `str` and `int`
+info: rule `unsupported-operator` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+  --> langgraph\pregel\_executor.py:90:37
+   |
+88 |             self.tasks.pop(task)
+89 |
+90 |     def __enter__(self) -> Submit:  # type: ignore
+   |                                     ^^^^^^^^^^^^^^
+91 |         return self.submit
+   |
+help: Remove the unused suppression comment
+87 |         else:
+88 |             self.tasks.pop(task)
+89 |
+   -     def __enter__(self) -> Submit:  # type: ignore
+90 +     def __enter__(self) -> Submit:
+91 |         return self.submit
+92 |
+93 |     def __exit__(
+
+error[invalid-return-type]: Return type does not match returned value
+  --> langgraph\pregel\_executor.py:90:28
+   |
+88 |             self.tasks.pop(task)
+89 |
+90 |     def __enter__(self) -> Submit:  # type: ignore
+   |                            ------ Expected `Submit[(...), Unknown]` because of return type
+91 |         return self.submit
+   |                ^^^^^^^^^^^ expected `Submit[(...), Unknown]`, found `bound method Self@__enter__.submit[**P, T](fn: (**P) -> T, *args: P.args, *, __name__: str | None = None, __cancel_on_exit__: bool = False, __reraise_on_exit__: bool = True, __next_tick__: bool = False, **kwargs: P.kwargs) -> Future[T]`
+92 |
+93 |     def __exit__(
+   |
+info: rule `invalid-return-type` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\pregel\_executor.py:183:44
+    |
+181 |             self.tasks.pop(task)
+182 |
+183 |     async def __aenter__(self) -> Submit:  # type: ignore
+    |                                            ^^^^^^^^^^^^^^
+184 |         return self.submit
+    |
+help: Remove the unused suppression comment
+180 |         except asyncio.CancelledError:
+181 |             self.tasks.pop(task)
+182 |
+    -     async def __aenter__(self) -> Submit:  # type: ignore
+183 +     async def __aenter__(self) -> Submit:
+184 |         return self.submit
+185 |
+186 |     async def __aexit__(
+
+error[invalid-return-type]: Return type does not match returned value
+   --> langgraph\pregel\_executor.py:183:35
+    |
+181 |             self.tasks.pop(task)
+182 |
+183 |     async def __aenter__(self) -> Submit:  # type: ignore
+    |                                   ------ Expected `Submit[(...), Unknown]` because of return type
+184 |         return self.submit
+    |                ^^^^^^^^^^^ expected `Submit[(...), Unknown]`, found `bound method Self@__aenter__.submit[**P, T](fn: (**P) -> Awaitable[T], *args: P.args, *, __name__: str | None = None, __cancel_on_exit__: bool = False, __reraise_on_exit__: bool = True, __next_tick__: bool = False, **kwargs: P.kwargs) -> Future[T]`
+185 |
+186 |     async def __aexit__(
+    |
+info: rule `invalid-return-type` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\pregel\_loop.py:620:18
+    |
+618 |         return hanging_interrupts
+619 |
+620 |     def _first(  # type: ignore
+    |                  ^^^^^^^^^^^^^^
+621 |         self, *, input_keys: str | Sequence[str], updated_channels: set[str] | None
+622 |     ) -> set[str] | None:
+    |
+help: Remove the unused suppression comment
+617 |
+618 |         return hanging_interrupts
+619 |
+    -     def _first(  # type: ignore
+620 +     def _first(
+621 |         self, *, input_keys: str | Sequence[str], updated_channels: set[str] | None
+622 |     ) -> set[str] | None:
+623 |         # Resuming from a previous checkpoint requires two things:
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\pregel\_loop.py:931:17
+    |
+929 |             self.output = read_channels(self.channels, self.output_keys)
+930 |
+931 |     def _emit(  # type: ignore
+    |                 ^^^^^^^^^^^^^^
+932 |         self,
+933 |         mode: StreamMode,
+    |
+help: Remove the unused suppression comment
+928 |             # save final output
+929 |             self.output = read_channels(self.channels, self.output_keys)
+930 |
+    -     def _emit(  # type: ignore
+931 +     def _emit(
+932 |         self,
+933 |         mode: StreamMode,
+934 |         values: Callable[P, Iterator[Any]],
+
+error[invalid-assignment]: Object of type `None` is not assignable to attribute `_checkpointer_put_after_previous` of type `def _checkpointer_put_after_previous(self, prev: Future[Unknown] | None, config: RunnableConfig, checkpoint: Checkpoint, metadata: CheckpointMetadata, new_versions: dict[str, str | int | float]) -> RunnableConfig`
+    --> langgraph\pregel\_loop.py:1075:13
+     |
+1073 |         else:
+1074 |             self.checkpointer_get_next_version = increment
+1075 |             self._checkpointer_put_after_previous = None  # type: ignore[assignment]
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1076 |             self.checkpointer_put_writes = None
+1077 |             self.checkpointer_put_writes_accepts_task_path = False
+     |
+info: Implicit shadowing of function `_checkpointer_put_after_previous`, add an annotation to make it explicit if this is intentional
+info: rule `invalid-assignment` is enabled by default
+
+error[invalid-argument-type]: Argument to bound method `_first` is incorrect
+    --> langgraph\pregel\_loop.py:1199:13
+     |
+1197 |           self.updated_channels = self._first(
+1198 |               input_keys=self.input_keys,
+1199 | /             updated_channels=set(self.checkpoint.get("updated_channels"))  # type: ignore[arg-type]
+1200 | |             if self.checkpoint.get("updated_channels")
+1201 | |             else None,
+     | |_____________________^ Expected `set[str] | None`, found `set[_T@set] | None`
+1202 |           )
+     |
+info: Element `set[_T@set]` of this union is not assignable to `set[str] | None`
+info: Method defined here
+   --> langgraph\pregel\_loop.py:620:9
+    |
+618 |         return hanging_interrupts
+619 |
+620 |     def _first(  # type: ignore
+    |         ^^^^^^
+621 |         self, *, input_keys: str | Sequence[str], updated_channels: set[str] | None
+    |                                                   --------------------------------- Parameter declared here
+622 |     ) -> set[str] | None:
+623 |         # Resuming from a previous checkpoint requires two things:
+    |
+info: rule `invalid-argument-type` is enabled by default
+
+error[invalid-argument-type]: Argument to bound method `__init__` is incorrect
+    --> langgraph\pregel\_loop.py:1199:34
+     |
+1197 |         self.updated_channels = self._first(
+1198 |             input_keys=self.input_keys,
+1199 |             updated_channels=set(self.checkpoint.get("updated_channels"))  # type: ignore[arg-type]
+     |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected `Iterable[str]`, found `list[str] | None | Any`
+1200 |             if self.checkpoint.get("updated_channels")
+1201 |             else None,
+     |
+info: Element `None` of this union is not assignable to `Iterable[str]`
+info: Matching overload defined here
+    --> stdlib\builtins.pyi:3076:9
+     |
+3074 |     def __init__(self) -> None: ...
+3075 |     @overload
+3076 |     def __init__(self, iterable: Iterable[_T], /) -> None: ...
+     |         ^^^^^^^^       ---------------------- Parameter declared here
+3077 |     def add(self, element: _T, /) -> None:
+3078 |         """Add an element to a set.
+     |
+info: Non-matching overloads for bound method `__init__`:
+info:   (self) -> None
+info: rule `invalid-argument-type` is enabled by default
+
+error[invalid-assignment]: Object of type `None` is not assignable to attribute `_checkpointer_put_after_previous` of type `def _checkpointer_put_after_previous(self, prev: Task[Unknown] | None, config: RunnableConfig, checkpoint: Checkpoint, metadata: CheckpointMetadata, new_versions: dict[str, str | int | float]) -> CoroutineType[Any, Any, RunnableConfig]`
+    --> langgraph\pregel\_loop.py:1271:13
+     |
+1269 |         else:
+1270 |             self.checkpointer_get_next_version = increment
+1271 |             self._checkpointer_put_after_previous = None  # type: ignore[assignment]
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1272 |             self.checkpointer_put_writes = None
+1273 |             self.checkpointer_put_writes_accepts_task_path = False
+     |
+info: Implicit shadowing of function `_checkpointer_put_after_previous`, add an annotation to make it explicit if this is intentional
+info: rule `invalid-assignment` is enabled by default
+
+error[invalid-argument-type]: Argument to bound method `_first` is incorrect
+    --> langgraph\pregel\_loop.py:1400:13
+     |
+1398 |           self.updated_channels = self._first(
+1399 |               input_keys=self.input_keys,
+1400 | /             updated_channels=set(self.checkpoint.get("updated_channels"))  # type: ignore[arg-type]
+1401 | |             if self.checkpoint.get("updated_channels")
+1402 | |             else None,
+     | |_____________________^ Expected `set[str] | None`, found `set[_T@set] | None`
+1403 |           )
+     |
+info: Element `set[_T@set]` of this union is not assignable to `set[str] | None`
+info: Method defined here
+   --> langgraph\pregel\_loop.py:620:9
+    |
+618 |         return hanging_interrupts
+619 |
+620 |     def _first(  # type: ignore
+    |         ^^^^^^
+621 |         self, *, input_keys: str | Sequence[str], updated_channels: set[str] | None
+    |                                                   --------------------------------- Parameter declared here
+622 |     ) -> set[str] | None:
+623 |         # Resuming from a previous checkpoint requires two things:
+    |
+info: rule `invalid-argument-type` is enabled by default
+
+error[invalid-argument-type]: Argument to bound method `__init__` is incorrect
+    --> langgraph\pregel\_loop.py:1400:34
+     |
+1398 |         self.updated_channels = self._first(
+1399 |             input_keys=self.input_keys,
+1400 |             updated_channels=set(self.checkpoint.get("updated_channels"))  # type: ignore[arg-type]
+     |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected `Iterable[str]`, found `list[str] | None | Any`
+1401 |             if self.checkpoint.get("updated_channels")
+1402 |             else None,
+     |
+info: Element `None` of this union is not assignable to `Iterable[str]`
+info: Matching overload defined here
+    --> stdlib\builtins.pyi:3076:9
+     |
+3074 |     def __init__(self) -> None: ...
+3075 |     @overload
+3076 |     def __init__(self, iterable: Iterable[_T], /) -> None: ...
+     |         ^^^^^^^^       ---------------------- Parameter declared here
+3077 |     def add(self, element: _T, /) -> None:
+3078 |         """Add an element to a set.
+     |
+info: Non-matching overloads for bound method `__init__`:
+info:   (self) -> None
+info: rule `invalid-argument-type` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\pregel\_read.py:135:20
+    |
+133 |     """Subgraphs used by the node."""
+134 |
+135 |     def __init__(  # type: ignore
+    |                    ^^^^^^^^^^^^^^
+136 |         self,
+137 |         *,
+    |
+help: Remove the unused suppression comment
+132 |     subgraphs: Sequence[PregelProtocol]
+133 |     """Subgraphs used by the node."""
+134 |
+    -     def __init__(  # type: ignore
+135 +     def __init__(
+136 |         self,
+137 |         *,
+138 |         channels: str | list[str],
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\pregel\_read.py:216:57
+    |
+215 |     @cached_property
+216 |     def input_cache_key(self) -> INPUT_CACHE_KEY_TYPE:  # type: ignore
+    |                                                         ^^^^^^^^^^^^^^
+217 |         """Get a cache key for the input to the node.
+218 |         This is used to avoid calculating the same input multiple times."""
+    |
+help: Remove the unused suppression comment
+213 |             return self.bound
+214 |
+215 |     @cached_property
+    -     def input_cache_key(self) -> INPUT_CACHE_KEY_TYPE:  # type: ignore
+216 +     def input_cache_key(self) -> INPUT_CACHE_KEY_TYPE:
+217 |         """Get a cache key for the input to the node.
+218 |         This is used to avoid calculating the same input multiple times."""
+219 |         return (
+
+error[invalid-return-type]: Return type does not match returned value
+   --> langgraph\pregel\_read.py:216:34
+    |
+215 |       @cached_property
+216 |       def input_cache_key(self) -> INPUT_CACHE_KEY_TYPE:  # type: ignore
+    |                                    -------------------- Expected `tuple[(...) -> Any, tuple[str, ...]]` because of return type
+217 |           """Get a cache key for the input to the node.
+218 |           This is used to avoid calculating the same input multiple times."""
+219 |           return (
+    |  ________________^
+220 | |             self.mapper,
+221 | |             tuple(self.channels)
+222 | |             if isinstance(self.channels, list)
+223 | |             else (self.channels,),
+224 | |         )
+    | |_________^ expected `tuple[(...) -> Any, tuple[str, ...]]`, found `tuple[((Any, /) -> Any) | None, tuple[str, ...]]`
+225 |
+226 |       def invoke(
+    |
+info: rule `invalid-return-type` is enabled by default
+
+error[call-non-callable]: Object of type `None` is not callable
+   --> langgraph\pregel\_runner.py:207:19
+    |
+205 |           # schedule tasks
+206 |           for t in tasks:
+207 |               fut = self.submit()(  # type: ignore[misc]
+    |  ___________________^
+208 | |                 run_with_retry,
+209 | |                 t,  # type: ignore
+210 | |                 retry_policy,  # type: ignore
+211 | |                 configurable={  # type: ignore
+212 | |                     CONFIG_KEY_CALL: partial(
+213 | |                         _call,
+214 | |                         weakref.ref(t),
+215 | |                         retry_policy=retry_policy,
+216 | |                         futures=weakref.ref(futures),
+217 | |                         schedule_task=schedule_task,
+218 | |                         submit=self.submit,
+219 | |                     ),
+220 | |                 },
+221 | |                 __reraise_on_exit__=reraise,
+222 | |             )
+    | |_____________^
+223 |               futures[fut] = t
+224 |           # execute tasks, and wait for one to fail or all to finish.
+    |
+info: Union variant `None` is incompatible with this call site
+info: Attempted to call union type `Unknown | Submit[(...), Unknown] | None`
+info: rule `call-non-callable` is enabled by default
+
+error[call-non-callable]: Object of type `None` is not callable
+   --> langgraph\pregel\_runner.py:349:17
+    |
+347 |               fut = cast(
+348 |                   asyncio.Future,
+349 | /                 self.submit()(  # type: ignore[misc]
+350 | |                     arun_with_retry,
+351 | |                     t,  # type: ignore
+352 | |                     retry_policy,  # type: ignore
+353 | |                     stream=self.use_astream,  # type: ignore
+354 | |                     configurable={  # type: ignore
+355 | |                         CONFIG_KEY_CALL: partial(
+356 | |                             _acall,
+357 | |                             weakref.ref(t),
+358 | |                             retry_policy=retry_policy,
+359 | |                             stream=self.use_astream,
+360 | |                             futures=weakref.ref(futures),
+361 | |                             schedule_task=schedule_task,
+362 | |                             submit=self.submit,
+363 | |                             loop=loop,
+364 | |                         ),
+365 | |                     },
+366 | |                     __name__=t.name,
+367 | |                     __cancel_on_exit__=True,
+368 | |                     __reraise_on_exit__=reraise,
+369 | |                 ),
+    | |_________________^
+370 |               )
+371 |               futures[fut] = t
+    |
+info: Union variant `None` is incompatible with this call site
+info: Attempted to call union type `Unknown | Submit[(...), Unknown] | None`
+info: rule `call-non-callable` is enabled by default
+
+error[call-non-callable]: Object of type `None` is not callable
+   --> langgraph\pregel\_runner.py:434:13
+    |
+432 |             # so loop can finish super-step
+433 |             task.writes.append((ERROR, exception))
+434 |             self.put_writes()(task.id, task.writes)  # type: ignore[misc]
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+435 |         elif exception:
+436 |             if isinstance(exception, GraphInterrupt):
+    |
+info: Union variant `None` is incompatible with this call site
+info: Attempted to call union type `Unknown | ((str, Sequence[tuple[str, Any]], /) -> None) | None`
+info: rule `call-non-callable` is enabled by default
+
+error[call-non-callable]: Object of type `None` is not callable
+   --> langgraph\pregel\_runner.py:442:21
+    |
+440 |                     if resumes := [w for w in task.writes if w[0] == RESUME]:
+441 |                         writes.extend(resumes)  # type: ignore
+442 |                     self.put_writes()(task.id, writes)  # type: ignore[misc]
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+443 |             elif isinstance(exception, GraphBubbleUp):
+444 |                 # exception will be raised in _panic_or_proceed
+    |
+info: Union variant `None` is incompatible with this call site
+info: Attempted to call union type `Unknown | ((str, Sequence[tuple[str, Any]], /) -> None) | None`
+info: rule `call-non-callable` is enabled by default
+
+error[call-non-callable]: Object of type `None` is not callable
+   --> langgraph\pregel\_runner.py:449:17
+    |
+447 |                 # save error to checkpointer
+448 |                 task.writes.append((ERROR, exception))
+449 |                 self.put_writes()(task.id, task.writes)  # type: ignore[misc]
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+450 |         else:
+451 |             if self.node_finished and (
+    |
+info: Union variant `None` is incompatible with this call site
+info: Attempted to call union type `Unknown | ((str, Sequence[tuple[str, Any]], /) -> None) | None`
+info: rule `call-non-callable` is enabled by default
+
+error[call-non-callable]: Object of type `None` is not callable
+   --> langgraph\pregel\_runner.py:459:13
+    |
+457 |                 task.writes.append((NO_WRITES, None))
+458 |             # save task writes to checkpointer
+459 |             self.put_writes()(task.id, task.writes)  # type: ignore[misc]
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+info: Union variant `None` is incompatible with this call site
+info: Attempted to call union type `Unknown | ((str, Sequence[tuple[str, Any]], /) -> None) | None`
+info: rule `call-non-callable` is enabled by default
+
+error[unresolved-attribute]: Attribute `config` is not defined on `None` in union `PregelExecutableTask | None`
+   --> langgraph\pregel\_runner.py:552:36
+    |
+550 |     fut: concurrent.futures.Future | None = None
+551 |     # schedule PUSH tasks, collect futures
+552 |     scratchpad: PregelScratchpad = task().config[CONF][CONFIG_KEY_SCRATCHPAD]  # type: ignore[union-attr]
+    |                                    ^^^^^^^^^^^^^
+553 |     # schedule the next task, if the callback returns one
+554 |     if next_task := schedule_task(
+    |
+info: rule `unresolved-attribute` is enabled by default
+
+error[invalid-argument-type]: Argument is incorrect
+   --> langgraph\pregel\_runner.py:555:9
+    |
+553 |     # schedule the next task, if the callback returns one
+554 |     if next_task := schedule_task(
+555 |         task(),  # type: ignore[arg-type]
+    |         ^^^^^^ Expected `PregelExecutableTask`, found `PregelExecutableTask | None`
+556 |         scratchpad.call_counter(),
+557 |         Call(
+    |
+info: Element `None` of this union is not assignable to `PregelExecutableTask`
+info: rule `invalid-argument-type` is enabled by default
+
+error[unresolved-attribute]: Attribute `items` is not defined on `None` in union `FuturesDict[Unknown, Unknown] | None`
+   --> langgraph\pregel\_runner.py:568:34
+    |
+566 |             (
+567 |                 f
+568 |                 for f, t in list(futures().items())  # type: ignore[union-attr]
+    |                                  ^^^^^^^^^^^^^^^
+569 |                 if t is not None and t == next_task.id
+570 |             ),
+    |
+info: rule `unresolved-attribute` is enabled by default
+
+error[call-non-callable]: Object of type `None` is not callable
+   --> langgraph\pregel\_runner.py:590:19
+    |
+588 |           else:
+589 |               # schedule the next task
+590 |               fut = submit()(  # type: ignore[misc]
+    |  ___________________^
+591 | |                 run_with_retry,
+592 | |                 next_task,  # type: ignore
+593 | |                 retry_policy,  # type: ignore
+594 | |                 configurable={  # type: ignore
+595 | |                     CONFIG_KEY_CALL: partial(
+596 | |                         _call,
+597 | |                         weakref.ref(next_task),
+598 | |                         futures=futures,
+599 | |                         retry_policy=retry_policy,
+600 | |                         callbacks=callbacks,
+601 | |                         schedule_task=schedule_task,
+602 | |                         submit=submit,
+603 | |                     ),
+604 | |                 },
+605 | |                 __reraise_on_exit__=False,
+606 | |                 # starting a new task in the next tick ensures
+607 | |                 # updates from this tick are committed/streamed first
+608 | |                 __next_tick__=True,
+609 | |             )
+    | |_____________^
+610 |               # exceptions for call() tasks are raised into the parent task
+611 |               # so we should not re-raise at the end of the tick
+    |
+info: Union variant `None` is incompatible with this call site
+info: Attempted to call union type `Submit[(...), Unknown] | None`
+info: rule `call-non-callable` is enabled by default
+
+error[invalid-assignment]: Cannot assign to a subscript on an object of type `None`
+   --> langgraph\pregel\_runner.py:613:13
+    |
+611 |             # so we should not re-raise at the end of the tick
+612 |             SKIP_RERAISE_SET.add(fut)
+613 |             futures()[fut] = next_task  # type: ignore[index]
+    |             ^^^^^^^^^^^^^^
+614 |     fut = cast(asyncio.Future | concurrent.futures.Future, fut)  # type: ignore
+615 |     # return a chained future to ensure commit() callback is called
+    |
+info: The full type of the subscripted object is `FuturesDict[Unknown, Unknown] | None`
+info: `None` does not have a `__setitem__` method.
+info: rule `invalid-assignment` is enabled by default
+
+error[unresolved-attribute]: Attribute `config` is not defined on `None` in union `PregelExecutableTask | None`
+   --> langgraph\pregel\_runner.py:695:40
+    |
+693 |         fut: asyncio.Future | None = None
+694 |         # schedule PUSH tasks, collect futures
+695 |         scratchpad: PregelScratchpad = task().config[CONF][CONFIG_KEY_SCRATCHPAD]  # type: ignore[union-attr]
+    |                                        ^^^^^^^^^^^^^
+696 |         # schedule the next task, if the callback returns one
+697 |         if next_task := await schedule_task(
+    |
+info: rule `unresolved-attribute` is enabled by default
+
+error[invalid-argument-type]: Argument is incorrect
+   --> langgraph\pregel\_runner.py:698:13
+    |
+696 |         # schedule the next task, if the callback returns one
+697 |         if next_task := await schedule_task(
+698 |             task(),  # type: ignore[arg-type]
+    |             ^^^^^^ Expected `PregelExecutableTask`, found `PregelExecutableTask | None`
+699 |             scratchpad.call_counter(),
+700 |             Call(
+    |
+info: Element `None` of this union is not assignable to `PregelExecutableTask`
+info: rule `invalid-argument-type` is enabled by default
+
+error[unresolved-attribute]: Attribute `items` is not defined on `None` in union `FuturesDict[Future[Unknown], Event] | None`
+   --> langgraph\pregel\_runner.py:711:38
+    |
+709 |                 (
+710 |                     f
+711 |                     for f, t in list(futures().items())  # type: ignore[union-attr]
+    |                                      ^^^^^^^^^^^^^^^
+712 |                     if t is not None and t == next_task.id
+713 |                 ),
+    |
+info: rule `unresolved-attribute` is enabled by default
+
+error[call-non-callable]: Object of type `None` is not callable
+   --> langgraph\pregel\_runner.py:735:21
+    |
+733 |                   fut = cast(
+734 |                       asyncio.Future,
+735 | /                     submit()(  # type: ignore[misc]
+736 | |                         arun_with_retry,
+737 | |                         next_task,  # type: ignore
+738 | |                         retry_policy,  # type: ignore
+739 | |                         stream=stream,  # type: ignore
+740 | |                         configurable={  # type: ignore
+741 | |                             CONFIG_KEY_CALL: partial(
+742 | |                                 _acall,
+743 | |                                 weakref.ref(next_task),
+744 | |                                 stream=stream,
+745 | |                                 futures=futures,
+746 | |                                 schedule_task=schedule_task,
+747 | |                                 submit=submit,
+748 | |                                 loop=loop,
+749 | |                             ),
+750 | |                         },
+751 | |                         __name__=next_task.name,
+752 | |                         __cancel_on_exit__=True,
+753 | |                         __reraise_on_exit__=False,
+754 | |                         # starting a new task in the next tick ensures
+755 | |                         # updates from this tick are committed/streamed first
+756 | |                         __next_tick__=True,
+757 | |                     ),
+    | |_____________________^
+758 |                   )
+759 |                   # exceptions for call() tasks are raised into the parent task
+    |
+info: Union variant `None` is incompatible with this call site
+info: Attempted to call union type `Submit[(...), Unknown] | None`
+info: rule `call-non-callable` is enabled by default
+
+error[invalid-assignment]: Cannot assign to a subscript on an object of type `None`
+   --> langgraph\pregel\_runner.py:762:17
+    |
+760 |                 # so we should not re-raise at the end of the tick
+761 |                 SKIP_RERAISE_SET.add(fut)
+762 |                 futures()[fut] = next_task  # type: ignore[index]
+    |                 ^^^^^^^^^^^^^^
+763 |         if fut is not None:
+764 |             chain_future(fut, destination)
+    |
+info: The full type of the subscripted object is `FuturesDict[Future[Unknown], Event] | None`
+info: `None` does not have a `__setitem__` method.
+info: rule `invalid-assignment` is enabled by default
+
+error[unsupported-operator]: Unsupported `>` operation
+  --> langgraph\pregel\_utils.py:28:16
+   |
+26 |             k: v
+27 |             for k, v in current_versions.items()
+28 |             if v > previous_versions.get(k, null_version)  # type: ignore[operator]
+   |                -^^^--------------------------------------
+   |                |   |
+   |                |   Has type `str | int | float | None`
+   |                Has type `str | int | float`
+29 |         }
+30 |     else:
+   |
+info: Operation fails because operator `>` is not supported between objects of type `str` and `int`
+info: rule `unsupported-operator` is enabled by default
+
+error[invalid-argument-type]: Invalid argument to key "triggers" with declared type `list[str]` on TypedDict `TaskPayload`
+  --> langgraph\pregel\debug.py:43:15
+   |
+41 |               continue
+42 |
+43 |           yield {  # type: ignore
+   |  _______________-
+44 | |             "id": task.id,
+45 | |             "name": task.name,
+46 | |             "input": task.input,
+47 | |             "triggers": task.triggers,
+   | |             ----------  ^^^^^^^^^^^^^ value of type `Sequence[str]`
+   | |             |
+   | |             key has declared type `list[str]`
+48 | |         }
+   | |_________- TypedDict `TaskPayload`
+   |
+info: Item declaration
+   --> langgraph\types.py:149:5
+    |
+147 |     input: Any
+148 |     """Input data passed to the task."""
+149 |     triggers: list[str]  # type: ignore
+    |     ------------------- Item declared here
+150 |     """List of triggers that caused this task to be executed (e.g. channel writes)."""
+    |
+info: rule `invalid-argument-type` is enabled by default
+
+error[invalid-argument-type]: Invalid argument to key "tasks" with declared type `list[CheckpointTask]` on TypedDict `CheckpointPayload[Unknown]`
+   --> langgraph\pregel\debug.py:153:11
+    |
+151 |            }
+152 |
+153 |        yield {  # type: ignore
+    |  ____________-
+154 | |          "config": rm_pregel_keys(patch_checkpoint_map(config, metadata)),
+155 | |          "parent_config": rm_pregel_keys(patch_checkpoint_map(parent_config, metadata)),
+156 | |          "values": read_channels(channels, stream_channels),
+157 | |          "metadata": metadata,
+158 | |          "next": [t.name for t in tasks],
+159 | |          "tasks": [
+    | | _________-------__^
+    | ||         |
+    | ||         key has declared type `list[CheckpointTask]`
+160 | ||             {  # type: ignore
+161 | ||                 "id": t.id,
+162 | ||                 "name": t.name,
+163 | ||                 "error": t.error,
+164 | ||                 "state": t.state,
+165 | ||             }
+166 | ||             if t.error
+167 | ||             else {  # type: ignore
+168 | ||                 "id": t.id,
+169 | ||                 "name": t.name,
+170 | ||                 "result": t.result,
+171 | ||                 "interrupts": tuple(asdict(i) for i in t.interrupts),
+172 | ||                 "state": t.state,
+173 | ||             }
+174 | ||             if t.result
+175 | ||             else {  # type: ignore
+176 | ||                 "id": t.id,
+177 | ||                 "name": t.name,
+178 | ||                 "interrupts": tuple(asdict(i) for i in t.interrupts),
+179 | ||                 "state": t.state,
+180 | ||             }
+181 | ||             for t in tasks_w_writes(tasks, pending_writes, task_states, output_keys)
+182 | ||         ],
+    | ||_________^ value of type `list[CheckpointTask | dict[str, str | Exception | None | RunnableConfig | StateSnapshot] | dict[str, str | Any | tuple[dict[str, Any], ...] | ... omitted 3 union elements] | dict[str, str | tuple[dict[str, Any], ...] | None | RunnableConfig | StateSnapshot]]`
+183 | |      }
+    | |______- TypedDict `CheckpointPayload[Unknown]`
+    |
+info: Item declaration
+   --> langgraph\types.py:205:5
+    |
+203 |     parent_config: RunnableConfig | None
+204 |     """Configuration of the parent checkpoint, or `None` if this is the first checkpoint."""
+205 |     tasks: list[CheckpointTask]  # type: ignore
+    |     --------------------------- Item declared here
+206 |     """List of tasks associated with this checkpoint."""
+    |
+info: rule `invalid-argument-type` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\pregel\debug.py:160:16
+    |
+158 |         "next": [t.name for t in tasks],
+159 |         "tasks": [
+160 |             {  # type: ignore
+    |                ^^^^^^^^^^^^^^
+161 |                 "id": t.id,
+162 |                 "name": t.name,
+    |
+help: Remove the unused suppression comment
+157 |         "metadata": metadata,
+158 |         "next": [t.name for t in tasks],
+159 |         "tasks": [
+    -             {  # type: ignore
+160 +             {
+161 |                 "id": t.id,
+162 |                 "name": t.name,
+163 |                 "error": t.error,
+
+error[invalid-argument-type]: Invalid argument to key "error" with declared type `str` on TypedDict `CheckpointTask`
+   --> langgraph\pregel\debug.py:160:13
+    |
+158 |           "next": [t.name for t in tasks],
+159 |           "tasks": [
+160 | /             {  # type: ignore
+161 | |                 "id": t.id,
+162 | |                 "name": t.name,
+163 | |                 "error": t.error,
+    | |                 -------  ^^^^^^^ value of type `Exception & ~AlwaysFalsy`
+    | |                 |
+    | |                 key has declared type `str`
+164 | |                 "state": t.state,
+165 | |             }
+    | |_____________- TypedDict `CheckpointTask`
+166 |               if t.error
+167 |               else {  # type: ignore
+    |
+info: Item declaration
+   --> langgraph\types.py:182:5
+    |
+180 |     name: str
+181 |     """Name of the node being executed."""
+182 |     error: NotRequired[str]  # type: ignore
+    |     ----------------------- Item declared here
+183 |     """Error message, present only if the task failed."""
+184 |     result: NotRequired[Any]
+    |
+info: rule `invalid-argument-type` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\pregel\debug.py:167:21
+    |
+165 |             }
+166 |             if t.error
+167 |             else {  # type: ignore
+    |                     ^^^^^^^^^^^^^^
+168 |                 "id": t.id,
+169 |                 "name": t.name,
+    |
+help: Remove the unused suppression comment
+164 |                 "state": t.state,
+165 |             }
+166 |             if t.error
+    -             else {  # type: ignore
+167 +             else {
+168 |                 "id": t.id,
+169 |                 "name": t.name,
+170 |                 "result": t.result,
+
+error[invalid-argument-type]: Invalid argument to key "interrupts" with declared type `list[dict[Unknown, Unknown]]` on TypedDict `CheckpointTask`
+   --> langgraph\pregel\debug.py:167:18
+    |
+165 |               }
+166 |               if t.error
+167 |               else {  # type: ignore
+    |  __________________-
+168 | |                 "id": t.id,
+169 | |                 "name": t.name,
+170 | |                 "result": t.result,
+171 | |                 "interrupts": tuple(asdict(i) for i in t.interrupts),
+    | |                 ------------  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ value of type `tuple[dict[str, Any], ...]`
+    | |                 |
+    | |                 key has declared type `list[dict[Unknown, Unknown]]`
+172 | |                 "state": t.state,
+173 | |             }
+    | |_____________- TypedDict `CheckpointTask`
+174 |               if t.result
+175 |               else {  # type: ignore
+    |
+info: Item declaration
+   --> langgraph\types.py:186:5
+    |
+184 |     result: NotRequired[Any]
+185 |     """Result of the task, present only if the task completed successfully."""
+186 |     interrupts: NotRequired[list[dict]]  # type: ignore
+    |     ----------------------------------- Item declared here
+187 |     """List of interrupts, present when the task has been interrupted or completed."""
+188 |     state: StateSnapshot | RunnableConfig | None
+    |
+info: rule `invalid-argument-type` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\pregel\debug.py:175:21
+    |
+173 |             }
+174 |             if t.result
+175 |             else {  # type: ignore
+    |                     ^^^^^^^^^^^^^^
+176 |                 "id": t.id,
+177 |                 "name": t.name,
+    |
+help: Remove the unused suppression comment
+172 |                 "state": t.state,
+173 |             }
+174 |             if t.result
+    -             else {  # type: ignore
+175 +             else {
+176 |                 "id": t.id,
+177 |                 "name": t.name,
+178 |                 "interrupts": tuple(asdict(i) for i in t.interrupts),
+
+error[invalid-argument-type]: Invalid argument to key "interrupts" with declared type `list[dict[Unknown, Unknown]]` on TypedDict `CheckpointTask`
+   --> langgraph\pregel\debug.py:175:18
+    |
+173 |               }
+174 |               if t.result
+175 |               else {  # type: ignore
+    |  __________________-
+176 | |                 "id": t.id,
+177 | |                 "name": t.name,
+178 | |                 "interrupts": tuple(asdict(i) for i in t.interrupts),
+    | |                 ------------  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ value of type `tuple[dict[str, Any], ...]`
+    | |                 |
+    | |                 key has declared type `list[dict[Unknown, Unknown]]`
+179 | |                 "state": t.state,
+180 | |             }
+    | |_____________- TypedDict `CheckpointTask`
+181 |               for t in tasks_w_writes(tasks, pending_writes, task_states, output_keys)
+182 |           ],
+    |
+info: Item declaration
+   --> langgraph\types.py:186:5
+    |
+184 |     result: NotRequired[Any]
+185 |     """Result of the task, present only if the task completed successfully."""
+186 |     interrupts: NotRequired[list[dict]]  # type: ignore
+    |     ----------------------------------- Item declared here
+187 |     """List of interrupts, present when the task has been interrupted or completed."""
+188 |     state: StateSnapshot | RunnableConfig | None
+    |
+info: rule `invalid-argument-type` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+    --> langgraph\pregel\main.py:2805:19
+     |
+2804 |     @overload
+2805 |     def astream(  # type: ignore
+     |                   ^^^^^^^^^^^^^^
+2806 |         self,
+2807 |         input: InputT | Command | None,
+     |
+help: Remove the unused suppression comment
+2802 |     ) -> AsyncIterator[StreamPart[StateT, OutputT]]: ...
+2803 |
+2804 |     @overload
+     -     def astream(  # type: ignore
+2805 +     def astream(
+2806 |         self,
+2807 |         input: InputT | Command | None,
+2808 |         config: RunnableConfig | None = None,
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+    --> langgraph\pregel\main.py:3691:23
+     |
+3691 | def _coerce_context(  # type: ignore
+     |                       ^^^^^^^^^^^^^^
+3692 |     context_schema: type[ContextT] | None, context: Any
+3693 | ) -> ContextT | None:
+     |
+help: Remove the unused suppression comment
+3688 |     return None
+3689 |
+3690 |
+     - def _coerce_context(  # type: ignore
+3691 + def _coerce_context(
+3692 |     context_schema: type[ContextT] | None, context: Any
+3693 | ) -> ContextT | None:
+3694 |     """Coerce context input to the appropriate schema type.
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\pregel\remote.py:690:18
+    |
+689 |     @overload
+690 |     def stream(  # type: ignore
+    |                  ^^^^^^^^^^^^^^
+691 |         self,
+692 |         input: dict[str, Any] | Any,
+    |
+help: Remove the unused suppression comment
+687 |         return (updated_stream_modes, requested_stream_modes, req_single, stream)
+688 |
+689 |     @overload
+    -     def stream(  # type: ignore
+690 +     def stream(
+691 |         self,
+692 |         input: dict[str, Any] | Any,
+693 |         config: RunnableConfig | None = None,
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\pregel\remote.py:723:18
+    |
+721 |     ) -> Iterator[dict[str, Any] | Any]: ...
+722 |
+723 |     def stream(  # type: ignore
+    |                  ^^^^^^^^^^^^^^
+724 |         self,
+725 |         input: dict[str, Any] | Any,
+    |
+help: Remove the unused suppression comment
+720 |         **kwargs: Any,
+721 |     ) -> Iterator[dict[str, Any] | Any]: ...
+722 |
+    -     def stream(  # type: ignore
+723 +     def stream(
+724 |         self,
+725 |         input: dict[str, Any] | Any,
+726 |         config: RunnableConfig | None = None,
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\pregel\remote.py:845:19
+    |
+844 |     @overload
+845 |     def astream(  # type: ignore
+    |                   ^^^^^^^^^^^^^^
+846 |         self,
+847 |         input: dict[str, Any] | Any,
+    |
+help: Remove the unused suppression comment
+842 |                 yield chunk
+843 |
+844 |     @overload
+    -     def astream(  # type: ignore
+845 +     def astream(
+846 |         self,
+847 |         input: dict[str, Any] | Any,
+848 |         config: RunnableConfig | None = None,
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\pregel\remote.py:878:25
+    |
+876 |     ) -> AsyncIterator[dict[str, Any] | Any]: ...
+877 |
+878 |     async def astream(  # type: ignore
+    |                         ^^^^^^^^^^^^^^
+879 |         self,
+880 |         input: dict[str, Any] | Any,
+    |
+help: Remove the unused suppression comment
+875 |         **kwargs: Any,
+876 |     ) -> AsyncIterator[dict[str, Any] | Any]: ...
+877 |
+    -     async def astream(  # type: ignore
+878 +     async def astream(
+879 |         self,
+880 |         input: dict[str, Any] | Any,
+881 |         config: RunnableConfig | None = None,
+
+error[no-matching-overload]: No overload of bound method `stream` matches arguments
+    --> langgraph\pregel\remote.py:1073:22
+     |
+1071 |               The output of the graph.
+1072 |           """
+1073 |           for chunk in self.stream(  # type: ignore[misc, call-overload]
+     |  ______________________^
+1074 | |             input,
+1075 | |             config=config,
+1076 | |             context=context,
+1077 | |             interrupt_before=interrupt_before,
+1078 | |             interrupt_after=interrupt_after,
+1079 | |             headers=headers,
+1080 | |             stream_mode="values",
+1081 | |             params=params,
+1082 | |             version=version,
+1083 | |             **kwargs,
+1084 | |         ):
+     | |_________^
+1085 |               pass
+1086 |           try:
+     |
+info: Limit of argument type expansion reached at argument 8
+info: First overload defined here
+   --> langgraph\pregel\remote.py:690:9
+    |
+689 |       @overload
+690 |       def stream(  # type: ignore
+    |  _________^
+691 | |         self,
+692 | |         input: dict[str, Any] | Any,
+693 | |         config: RunnableConfig | None = None,
+694 | |         *,
+695 | |         context: Context | None = None,
+696 | |         stream_mode: StreamMode | list[StreamMode] | None = None,
+697 | |         interrupt_before: All | Sequence[str] | None = None,
+698 | |         interrupt_after: All | Sequence[str] | None = None,
+699 | |         subgraphs: bool = False,
+700 | |         headers: dict[str, str] | None = None,
+701 | |         params: QueryParamTypes | None = None,
+702 | |         version: Literal["v2"],
+703 | |         **kwargs: Any,
+704 | |     ) -> Iterator[StreamPart]: ...
+    | |_____________________________^
+705 |
+706 |       @overload
+    |
+info: Possible overloads for bound method `stream`:
+info:   (self, input: dict[str, Any] | Any, config: RunnableConfig | None = None, *, context: _TypedDictLikeV1 | _DataclassLike | _BaseModelLike | Mapping[str, Divergent] | None = None, stream_mode: Literal["values", "updates", "checkpoints", "tasks", "debug", "messages", "custom"] | list[Literal["values", "updates", "checkpoints", "tasks", "debug", "messages", "custom"]] | None = None, interrupt_before: Sequence[str] | None = None, interrupt_after: Sequence[str] | None = None, subgraphs: bool = False, headers: dict[str, str] | None = None, params: Mapping[str, Sequence[str | int | float | None] | int | float | None] | list[tuple[str, str | int | float | None]] | tuple[tuple[str, str | int | float | None], ...] | ... omitted 3 union elements = None, version: Literal["v2"], **kwargs: Any) -> Iterator[StreamPart]
+info:   (self, input: dict[str, Any] | Any, config: RunnableConfig | None = None, *, context: _TypedDictLikeV1 | _DataclassLike | _BaseModelLike | Mapping[str, Divergent] | None = None, stream_mode: Literal["values", "updates", "checkpoints", "tasks", "debug", "messages", "custom"] | list[Literal["values", "updates", "checkpoints", "tasks", "debug", "messages", "custom"]] | None = None, interrupt_before: Sequence[str] | None = None, interrupt_after: Sequence[str] | None = None, subgraphs: bool = False, headers: dict[str, str] | None = None, params: Mapping[str, Sequence[str | int | float | None] | int | float | None] | list[tuple[str, str | int | float | None]] | tuple[tuple[str, str | int | float | None], ...] | ... omitted 3 union elements = None, version: Literal["v1"] = ..., **kwargs: Any) -> Iterator[dict[str, Any] | Any]
+info: Overload implementation defined here
+   --> langgraph\pregel\remote.py:723:9
+    |
+721 |       ) -> Iterator[dict[str, Any] | Any]: ...
+722 |
+723 |       def stream(  # type: ignore
+    |  _________^
+724 | |         self,
+725 | |         input: dict[str, Any] | Any,
+726 | |         config: RunnableConfig | None = None,
+727 | |         *,
+728 | |         context: Context | None = None,
+729 | |         stream_mode: StreamMode | list[StreamMode] | None = None,
+730 | |         interrupt_before: All | Sequence[str] | None = None,
+731 | |         interrupt_after: All | Sequence[str] | None = None,
+732 | |         subgraphs: bool = False,
+733 | |         headers: dict[str, str] | None = None,
+734 | |         params: QueryParamTypes | None = None,
+735 | |         version: Literal["v1", "v2"] = "v1",
+736 | |         **kwargs: Any,
+737 | |     ) -> Iterator[dict[str, Any] | Any]:
+    | |_______________________________________^
+738 |           """Create a run and stream the results.
+    |
+info: rule `no-matching-overload` is enabled by default
+
+error[no-matching-overload]: No overload of bound method `astream` matches arguments
+    --> langgraph\pregel\remote.py:1155:28
+     |
+1153 |               The output of the graph.
+1154 |           """
+1155 |           async for chunk in self.astream(  # type: ignore[misc, call-overload]
+     |  ____________________________^
+1156 | |             input,
+1157 | |             config=config,
+1158 | |             context=context,
+1159 | |             interrupt_before=interrupt_before,
+1160 | |             interrupt_after=interrupt_after,
+1161 | |             headers=headers,
+1162 | |             stream_mode="values",
+1163 | |             params=params,
+1164 | |             version=version,
+1165 | |             **kwargs,
+1166 | |         ):
+     | |_________^
+1167 |               pass
+1168 |           try:
+     |
+info: Limit of argument type expansion reached at argument 8
+info: First overload defined here
+   --> langgraph\pregel\remote.py:845:9
+    |
+844 |       @overload
+845 |       def astream(  # type: ignore
+    |  _________^
+846 | |         self,
+847 | |         input: dict[str, Any] | Any,
+848 | |         config: RunnableConfig | None = None,
+849 | |         *,
+850 | |         context: Context | None = None,
+851 | |         stream_mode: StreamMode | list[StreamMode] | None = None,
+852 | |         interrupt_before: All | Sequence[str] | None = None,
+853 | |         interrupt_after: All | Sequence[str] | None = None,
+854 | |         subgraphs: bool = False,
+855 | |         headers: dict[str, str] | None = None,
+856 | |         params: QueryParamTypes | None = None,
+857 | |         version: Literal["v2"],
+858 | |         **kwargs: Any,
+859 | |     ) -> AsyncIterator[StreamPart]: ...
+    | |__________________________________^
+860 |
+861 |       @overload
+    |
+info: Possible overloads for bound method `astream`:
+info:   (self, input: dict[str, Any] | Any, config: RunnableConfig | None = None, *, context: _TypedDictLikeV1 | _DataclassLike | _BaseModelLike | Mapping[str, Divergent] | None = None, stream_mode: Literal["values", "updates", "checkpoints", "tasks", "debug", "messages", "custom"] | list[Literal["values", "updates", "checkpoints", "tasks", "debug", "messages", "custom"]] | None = None, interrupt_before: Sequence[str] | None = None, interrupt_after: Sequence[str] | None = None, subgraphs: bool = False, headers: dict[str, str] | None = None, params: Mapping[str, Sequence[str | int | float | None] | int | float | None] | list[tuple[str, str | int | float | None]] | tuple[tuple[str, str | int | float | None], ...] | ... omitted 3 union elements = None, version: Literal["v2"], **kwargs: Any) -> AsyncIterator[StreamPart]
+info:   (self, input: dict[str, Any] | Any, config: RunnableConfig | None = None, *, context: _TypedDictLikeV1 | _DataclassLike | _BaseModelLike | Mapping[str, Divergent] | None = None, stream_mode: Literal["values", "updates", "checkpoints", "tasks", "debug", "messages", "custom"] | list[Literal["values", "updates", "checkpoints", "tasks", "debug", "messages", "custom"]] | None = None, interrupt_before: Sequence[str] | None = None, interrupt_after: Sequence[str] | None = None, subgraphs: bool = False, headers: dict[str, str] | None = None, params: Mapping[str, Sequence[str | int | float | None] | int | float | None] | list[tuple[str, str | int | float | None]] | tuple[tuple[str, str | int | float | None], ...] | ... omitted 3 union elements = None, version: Literal["v1"] = ..., **kwargs: Any) -> AsyncIterator[dict[str, Any] | Any]
+info: Overload implementation defined here
+   --> langgraph\pregel\remote.py:878:15
+    |
+876 |       ) -> AsyncIterator[dict[str, Any] | Any]: ...
+877 |
+878 |       async def astream(  # type: ignore
+    |  _______________^
+879 | |         self,
+880 | |         input: dict[str, Any] | Any,
+881 | |         config: RunnableConfig | None = None,
+882 | |         *,
+883 | |         context: Context | None = None,
+884 | |         stream_mode: StreamMode | list[StreamMode] | None = None,
+885 | |         interrupt_before: All | Sequence[str] | None = None,
+886 | |         interrupt_after: All | Sequence[str] | None = None,
+887 | |         subgraphs: bool = False,
+888 | |         headers: dict[str, str] | None = None,
+889 | |         params: QueryParamTypes | None = None,
+890 | |         version: Literal["v1", "v2"] = "v1",
+891 | |         **kwargs: Any,
+892 | |     ) -> AsyncIterator[dict[str, Any] | Any]:
+    | |____________________________________________^
+893 |           """Create a run and stream the results.
+    |
+info: rule `no-matching-overload` is enabled by default
+
+error[invalid-assignment]: Object of type `dataclasses.Field[None]` is not assignable to `ContextT@Runtime`
+   --> langgraph\runtime.py:163:14
+    |
+161 |     """
+162 |
+163 |     context: ContextT = field(default=None)  # type: ignore[assignment]
+    |              --------   ^^^^^^^^^^^^^^^^^^^ Incompatible value of type `dataclasses.Field[None]`
+    |              |
+    |              Declared type
+164 |     """Static context for the graph run, like `user_id`, `db_conn`, etc.
+    |
+info: rule `invalid-assignment` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\types.py:149:26
+    |
+147 |     input: Any
+148 |     """Input data passed to the task."""
+149 |     triggers: list[str]  # type: ignore
+    |                          ^^^^^^^^^^^^^^
+150 |     """List of triggers that caused this task to be executed (e.g. channel writes)."""
+    |
+help: Remove the unused suppression comment
+146 |     """Name of the node being executed."""
+147 |     input: Any
+148 |     """Input data passed to the task."""
+    -     triggers: list[str]  # type: ignore
+149 +     triggers: list[str]
+150 |     """List of triggers that caused this task to be executed (e.g. channel writes)."""
+151 |
+152 |
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\types.py:182:30
+    |
+180 |     name: str
+181 |     """Name of the node being executed."""
+182 |     error: NotRequired[str]  # type: ignore
+    |                              ^^^^^^^^^^^^^^
+183 |     """Error message, present only if the task failed."""
+184 |     result: NotRequired[Any]
+    |
+help: Remove the unused suppression comment
+179 |     """Unique identifier for this task."""
+180 |     name: str
+181 |     """Name of the node being executed."""
+    -     error: NotRequired[str]  # type: ignore
+182 +     error: NotRequired[str]
+183 |     """Error message, present only if the task failed."""
+184 |     result: NotRequired[Any]
+185 |     """Result of the task, present only if the task completed successfully."""
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\types.py:186:42
+    |
+184 |     result: NotRequired[Any]
+185 |     """Result of the task, present only if the task completed successfully."""
+186 |     interrupts: NotRequired[list[dict]]  # type: ignore
+    |                                          ^^^^^^^^^^^^^^
+187 |     """List of interrupts, present when the task has been interrupted or completed."""
+188 |     state: StateSnapshot | RunnableConfig | None
+    |
+help: Remove the unused suppression comment
+183 |     """Error message, present only if the task failed."""
+184 |     result: NotRequired[Any]
+185 |     """Result of the task, present only if the task completed successfully."""
+    -     interrupts: NotRequired[list[dict]]  # type: ignore
+186 +     interrupts: NotRequired[list[dict]]
+187 |     """List of interrupts, present when the task has been interrupted or completed."""
+188 |     state: StateSnapshot | RunnableConfig | None
+189 |     """Snapshot of the subgraph state, or a `RunnableConfig` pointing to it. `None` if not a subgraph."""
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\types.py:205:34
+    |
+203 |     parent_config: RunnableConfig | None
+204 |     """Configuration of the parent checkpoint, or `None` if this is the first checkpoint."""
+205 |     tasks: list[CheckpointTask]  # type: ignore
+    |                                  ^^^^^^^^^^^^^^
+206 |     """List of tasks associated with this checkpoint."""
+    |
+help: Remove the unused suppression comment
+202 |     """Names of the nodes scheduled to execute next."""
+203 |     parent_config: RunnableConfig | None
+204 |     """Configuration of the parent checkpoint, or `None` if this is the first checkpoint."""
+    -     tasks: list[CheckpointTask]  # type: ignore
+205 +     tasks: list[CheckpointTask]
+206 |     """List of tasks associated with this checkpoint."""
+207 |
+208 |
+
+error[invalid-assignment]: Object of type `def default_cache_key(...) -> str | bytes` is not assignable to `KeyFuncT@CachePolicy`
+   --> langgraph\types.py:433:15
+    |
+431 |     """Configuration for caching nodes."""
+432 |
+433 |     key_func: KeyFuncT = default_cache_key  # type: ignore[assignment]
+    |               --------   ^^^^^^^^^^^^^^^^^ Incompatible value of type `def default_cache_key(...) -> str | bytes`
+    |               |
+    |               Declared type
+434 |     """Function to generate a cache key from the node's input.
+435 |     Defaults to hashing the input with pickle."""
+    |
+info: rule `invalid-assignment` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+   --> langgraph\types.py:687:64
+    |
+685 |         return f"Command({contents})"
+686 |
+687 |     def _update_as_tuples(self) -> Sequence[tuple[str, Any]]:  # type: ignore
+    |                                                                ^^^^^^^^^^^^^^
+688 |         if isinstance(self.update, dict):
+689 |             return list(self.update.items())
+    |
+help: Remove the unused suppression comment
+684 |         )
+685 |         return f"Command({contents})"
+686 |
+    -     def _update_as_tuples(self) -> Sequence[tuple[str, Any]]:  # type: ignore
+687 +     def _update_as_tuples(self) -> Sequence[tuple[str, Any]]:
+688 |         if isinstance(self.update, dict):
+689 |             return list(self.update.items())
+690 |         elif isinstance(self.update, (list, tuple)) and all(
+
+error[invalid-return-type]: Return type does not match returned value
+   --> langgraph\types.py:687:36
+    |
+685 |         return f"Command({contents})"
+686 |
+687 |     def _update_as_tuples(self) -> Sequence[tuple[str, Any]]:  # type: ignore
+    |                                    ------------------------- Expected `Sequence[tuple[str, Any]]` because of return type
+688 |         if isinstance(self.update, dict):
+689 |             return list(self.update.items())
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^ expected `Sequence[tuple[str, Any]]`, found `list[tuple[object, object]]`
+690 |         elif isinstance(self.update, (list, tuple)) and all(
+691 |             isinstance(t, tuple) and len(t) == 2 and isinstance(t[0], str)
+    |
+info: rule `invalid-return-type` is enabled by default
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+  --> langgraph\typing.py:16:46
+   |
+14 | )
+15 |
+16 | StateT = TypeVar("StateT", bound=StateLike)  # type: ignore
+   |                                              ^^^^^^^^^^^^^^
+17 | """Type variable used to represent the state in a graph."""
+   |
+help: Remove the unused suppression comment
+13 |     "ContextT",
+14 | )
+15 |
+   - StateT = TypeVar("StateT", bound=StateLike)  # type: ignore
+16 + StateT = TypeVar("StateT", bound=StateLike)
+17 | """Type variable used to represent the state in a graph."""
+18 |
+19 | StateT_co = TypeVar("StateT_co", bound=StateLike, covariant=True)
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+  --> langgraph\typing.py:33:62
+   |
+31 | )
+32 |
+33 | InputT = TypeVar("InputT", bound=StateLike, default=StateT)  # type: ignore
+   |                                                              ^^^^^^^^^^^^^^
+34 | """Type variable used to represent the input to a `StateGraph`.
+   |
+help: Remove the unused suppression comment
+30 |     "ContextT_contra", bound=StateLike | None, contravariant=True, default=None
+31 | )
+32 |
+   - InputT = TypeVar("InputT", bound=StateLike, default=StateT)  # type: ignore
+33 + InputT = TypeVar("InputT", bound=StateLike, default=StateT)
+34 | """Type variable used to represent the input to a `StateGraph`.
+35 |
+36 | Defaults to `StateT`.
+
+warning[unused-type-ignore-comment]: Unused blanket `type: ignore` directive
+  --> langgraph\typing.py:39:64
+   |
+37 | """
+38 |
+39 | OutputT = TypeVar("OutputT", bound=StateLike, default=StateT)  # type: ignore
+   |                                                                ^^^^^^^^^^^^^^
+40 | """Type variable used to represent the output of a `StateGraph`.
+   |
+help: Remove the unused suppression comment
+36 | Defaults to `StateT`.
+37 | """
+38 |
+   - OutputT = TypeVar("OutputT", bound=StateLike, default=StateT)  # type: ignore
+39 + OutputT = TypeVar("OutputT", bound=StateLike, default=StateT)
+40 | """Type variable used to represent the output of a `StateGraph`.
+41 |
+42 | Defaults to `StateT`.
+
+Found 105 diagnostics

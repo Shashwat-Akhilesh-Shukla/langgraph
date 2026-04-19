@@ -70,7 +70,7 @@ def wide_dict(n: int) -> StateGraph:
             for k in write
         }
 
-    builder = StateGraph(State)
+    builder = StateGraph(State)  # type: ignore
     builder.add_edge(START, "one")
     builder.add_node(
         "one",
@@ -120,13 +120,13 @@ def wide_dict(n: int) -> StateGraph:
         "six", lambda state: END if len(state["messages"]) > n else "one"
     )
 
-    return builder
+    return builder  # type: ignore
 
 
 if __name__ == "__main__":
     import asyncio
 
-    import uvloop
+    import uvloop  # type: ignore
     from langgraph.checkpoint.memory import InMemorySaver
 
     graph = wide_dict(1000).compile(checkpointer=InMemorySaver())
@@ -144,7 +144,7 @@ if __name__ == "__main__":
     config = {"configurable": {"thread_id": "1"}, "recursion_limit": 20000000000}
 
     async def run():
-        async for c in graph.astream(input, config=config):
+        async for c in graph.astream(input, config=config):  # type: ignore
             print(c.keys())
 
     uvloop.install()

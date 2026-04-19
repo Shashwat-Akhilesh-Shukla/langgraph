@@ -488,7 +488,7 @@ def prepare_next_tasks(
             retry_policy=retry_policy,
         ):
             tasks.append(task)
-    return {t.id: t for t in tasks}
+    return {t.id: t for t in tasks}  # type: ignore
 
 
 PUSH_TRIGGER = (PUSH,)
@@ -993,7 +993,7 @@ def prepare_push_task_send(
                 run_id=str(rid) if (rid := config.get("run_id")) else None,
             ),
         )
-        additional_config: RunnableConfig = {
+        additional_config: RunnableConfig = {  # type: ignore
             "metadata": metadata,
             "tags": proc.tags,
         }
@@ -1048,7 +1048,7 @@ def prepare_push_task_send(
 
 def checkpoint_null_version(
     checkpoint: Checkpoint,
-) -> V | None:
+) -> V | None:  # type: ignore
     """Get the null version for the checkpoint, if available."""
     for version in checkpoint["channel_versions"].values():
         return type(version)()

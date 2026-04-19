@@ -66,7 +66,7 @@ class NamedBarrierValue(Generic[Value], BaseChannel[Value, Value, set[Value]]):
                 )
         return updated
 
-    def get(self) -> Value:
+    def get(self) -> Value:  # type: ignore
         if self.seen != self.names:
             raise EmptyChannelError()
         return None
@@ -124,7 +124,7 @@ class NamedBarrierValueAfterFinish(
     def checkpoint(self) -> tuple[set[Value], bool]:
         return (self.seen, self.finished)
 
-    def from_checkpoint(self, checkpoint: tuple[set[Value], bool]) -> Self:
+    def from_checkpoint(self, checkpoint: tuple[set[Value], bool]) -> Self:  # type: ignore
         empty = self.__class__(self.typ, self.names)
         empty.key = self.key
         if checkpoint is not MISSING:
@@ -144,7 +144,7 @@ class NamedBarrierValueAfterFinish(
                 )
         return updated
 
-    def get(self) -> Value:
+    def get(self) -> Value:  # type: ignore
         if not self.finished or self.seen != self.names:
             raise EmptyChannelError()
         return None

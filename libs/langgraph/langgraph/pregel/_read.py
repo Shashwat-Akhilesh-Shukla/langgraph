@@ -132,7 +132,7 @@ class PregelNode:
     subgraphs: Sequence[PregelProtocol]
     """Subgraphs used by the node."""
 
-    def __init__(
+    def __init__(  # type: ignore
         self,
         *,
         channels: str | list[str],
@@ -213,7 +213,7 @@ class PregelNode:
             return self.bound
 
     @cached_property
-    def input_cache_key(self) -> INPUT_CACHE_KEY_TYPE:
+    def input_cache_key(self) -> INPUT_CACHE_KEY_TYPE:  # type: ignore
         """Get a cache key for the input to the node.
         This is used to avoid calculating the same input multiple times."""
         return (
@@ -229,7 +229,7 @@ class PregelNode:
         config: RunnableConfig | None = None,
         **kwargs: Any | None,
     ) -> Any:
-        self_config: RunnableConfig = {"metadata": self.metadata, "tags": self.tags}
+        self_config: RunnableConfig = {"metadata": self.metadata, "tags": self.tags}  # type: ignore
         return self.bound.invoke(
             input,
             merge_configs(self_config, config),
@@ -242,7 +242,7 @@ class PregelNode:
         config: RunnableConfig | None = None,
         **kwargs: Any | None,
     ) -> Any:
-        self_config: RunnableConfig = {"metadata": self.metadata, "tags": self.tags}
+        self_config: RunnableConfig = {"metadata": self.metadata, "tags": self.tags}  # type: ignore
         return await self.bound.ainvoke(
             input,
             merge_configs(self_config, config),
@@ -255,7 +255,7 @@ class PregelNode:
         config: RunnableConfig | None = None,
         **kwargs: Any | None,
     ) -> Iterator[Any]:
-        self_config: RunnableConfig = {"metadata": self.metadata, "tags": self.tags}
+        self_config: RunnableConfig = {"metadata": self.metadata, "tags": self.tags}  # type: ignore
         yield from self.bound.stream(
             input,
             merge_configs(self_config, config),
@@ -268,7 +268,7 @@ class PregelNode:
         config: RunnableConfig | None = None,
         **kwargs: Any | None,
     ) -> AsyncIterator[Any]:
-        self_config: RunnableConfig = {"metadata": self.metadata, "tags": self.tags}
+        self_config: RunnableConfig = {"metadata": self.metadata, "tags": self.tags}  # type: ignore
         async for item in self.bound.astream(
             input,
             merge_configs(self_config, config),

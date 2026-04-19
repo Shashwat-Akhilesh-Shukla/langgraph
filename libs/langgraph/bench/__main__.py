@@ -4,7 +4,7 @@ from uuid import uuid4
 from langchain_core.messages import HumanMessage
 from langgraph.checkpoint.memory import InMemorySaver
 from pyperf._runner import Runner
-from uvloop import new_event_loop
+from uvloop import new_event_loop  # type: ignore
 
 from bench.fanout_to_subgraph import fanout_to_subgraph, fanout_to_subgraph_sync
 from bench.pydantic_state import pydantic_state
@@ -51,7 +51,7 @@ async def arun_first_event_latency(graph: Pregel, input: dict) -> None:
         async for _ in stream:
             break
     finally:
-        await stream.aclose()
+        await stream.aclose()  # type: ignore
 
 
 def run(graph: Pregel, input: dict):
@@ -88,7 +88,7 @@ def run_first_event_latency(graph: Pregel, input: dict) -> None:
         for _ in stream:
             break
     finally:
-        stream.close()
+        stream.close()  # type: ignore
 
 
 def compile_graph(graph: StateGraph) -> None:

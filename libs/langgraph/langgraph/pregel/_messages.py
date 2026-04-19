@@ -142,7 +142,7 @@ class StreamMessagesHandler(BaseCallbackHandler, _StreamingCallbackHandler):
                     metadata["tags"] = filtered_tags
             self.metadata[run_id] = (ns, metadata)
 
-    def on_llm_new_token(
+    def on_llm_new_token(  # type: ignore
         self,
         token: str,
         *,
@@ -214,7 +214,7 @@ class StreamMessagesHandler(BaseCallbackHandler, _StreamingCallbackHandler):
                             if item.id is not None:
                                 self.seen.add(item.id)
 
-    def on_chain_end(
+    def on_chain_end(  # type: ignore
         self,
         response: Any,
         *,

@@ -323,7 +323,7 @@ class RemoteGraph(PregelProtocol):
                     "checkpoint_map": state["checkpoint"].get("checkpoint_map", {}),
                 }
             },
-            metadata=CheckpointMetadata(**state["metadata"]),
+            metadata=CheckpointMetadata(**state["metadata"]),  # type: ignore
             created_at=state["created_at"],
             parent_config=(
                 {
@@ -358,7 +358,7 @@ class RemoteGraph(PregelProtocol):
         if "checkpoint_map" in config["configurable"]:
             checkpoint["checkpoint_map"] = config["configurable"]["checkpoint_map"]
 
-        return checkpoint if checkpoint else None
+        return checkpoint if checkpoint else None  # type: ignore
 
     def _get_config(self, checkpoint: Checkpoint) -> RunnableConfig:
         return {
@@ -551,14 +551,14 @@ class RemoteGraph(PregelProtocol):
         for state in states:
             yield self._create_state_snapshot(state)
 
-    def bulk_update_state(
+    def bulk_update_state(  # type: ignore
         self,
         config: RunnableConfig,
         updates: list[tuple[dict[str, Any] | None, str | None]],
     ) -> RunnableConfig:
         raise NotImplementedError
 
-    async def abulk_update_state(
+    async def abulk_update_state(  # type: ignore
         self,
         config: RunnableConfig,
         updates: list[tuple[dict[str, Any] | None, str | None]],
@@ -687,7 +687,7 @@ class RemoteGraph(PregelProtocol):
         return (updated_stream_modes, requested_stream_modes, req_single, stream)
 
     @overload
-    def stream(
+    def stream(  # type: ignore
         self,
         input: dict[str, Any] | Any,
         config: RunnableConfig | None = None,
@@ -720,7 +720,7 @@ class RemoteGraph(PregelProtocol):
         **kwargs: Any,
     ) -> Iterator[dict[str, Any] | Any]: ...
 
-    def stream(
+    def stream(  # type: ignore
         self,
         input: dict[str, Any] | Any,
         config: RunnableConfig | None = None,
@@ -842,7 +842,7 @@ class RemoteGraph(PregelProtocol):
                 yield chunk
 
     @overload
-    def astream(
+    def astream(  # type: ignore
         self,
         input: dict[str, Any] | Any,
         config: RunnableConfig | None = None,
@@ -875,7 +875,7 @@ class RemoteGraph(PregelProtocol):
         **kwargs: Any,
     ) -> AsyncIterator[dict[str, Any] | Any]: ...
 
-    async def astream(
+    async def astream(  # type: ignore
         self,
         input: dict[str, Any] | Any,
         config: RunnableConfig | None = None,
@@ -996,7 +996,7 @@ class RemoteGraph(PregelProtocol):
             else:
                 yield chunk
 
-    async def astream_events(
+    async def astream_events(  # type: ignore
         self,
         input: Any,
         config: RunnableConfig | None = None,

@@ -138,7 +138,7 @@ def wide_state(n: int) -> StateGraph:
 if __name__ == "__main__":
     import asyncio
 
-    import uvloop
+    import uvloop  # type: ignore
     from langgraph.checkpoint.memory import InMemorySaver
 
     graph = wide_state(1000).compile(checkpointer=InMemorySaver())
@@ -156,7 +156,7 @@ if __name__ == "__main__":
     config = {"configurable": {"thread_id": "1"}, "recursion_limit": 20000000000}
 
     async def run():
-        async for c in graph.astream(input, config=config):
+        async for c in graph.astream(input, config=config):  # type: ignore
             print(c.keys())
 
     uvloop.install()

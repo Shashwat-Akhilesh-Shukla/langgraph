@@ -174,7 +174,7 @@ def get_runnable_for_entrypoint(func: Callable[..., Any]) -> Runnable:
     else:
         if is_async_callable(func):
             run = RunnableCallable(
-                None, func, name=func.__name__, trace=False, recurse=False
+                None, func, name=func.__name__, trace=False, recurse=False  # type: ignore
             )
         else:
             afunc = functools.update_wrapper(
@@ -183,7 +183,7 @@ def get_runnable_for_entrypoint(func: Callable[..., Any]) -> Runnable:
             run = RunnableCallable(
                 func,
                 afunc,
-                name=func.__name__,
+                name=func.__name__,  # type: ignore
                 trace=False,
                 recurse=False,
             )
@@ -200,7 +200,7 @@ def get_runnable_for_task(func: Callable[..., Any]) -> Runnable:
         if hasattr(func, "__name__"):
             name = func.__name__
         elif hasattr(func, "func"):
-            name = func.func.__name__
+            name = func.func.__name__  # type: ignore
         elif hasattr(func, "__class__"):
             name = func.__class__.__name__
         else:
@@ -211,7 +211,7 @@ def get_runnable_for_task(func: Callable[..., Any]) -> Runnable:
                 None,
                 func,
                 explode_args=True,
-                name=name,
+                name=name,  # type: ignore
                 trace=False,
                 recurse=False,
             )
@@ -220,14 +220,14 @@ def get_runnable_for_task(func: Callable[..., Any]) -> Runnable:
                 func,
                 functools.wraps(func)(functools.partial(run_in_executor, None, func)),
                 explode_args=True,
-                name=name,
+                name=name,  # type: ignore
                 trace=False,
                 recurse=False,
             )
         seq = RunnableSeq(
             run,
             ChannelWrite([ChannelWriteEntry(RETURN)]),
-            name=name,
+            name=name,  # type: ignore
             trace_inputs=functools.partial(
                 _explode_args_trace_inputs, inspect.signature(func)
             ),
@@ -246,7 +246,7 @@ T = TypeVar("T")
 
 
 class SyncAsyncFuture(Generic[T], concurrent.futures.Future[T]):
-    def __await__(self) -> Generator[T, None, T]:
+    def __await__(self) -> Generator[T, None, T]:  # type: ignore
         yield cast(T, ...)
 
 

@@ -254,7 +254,7 @@ RunnableLike = (
 class RunnableCallable(Runnable):
     """A much simpler version of RunnableLambda that requires sync and async functions."""
 
-    def __init__(
+    def __init__(  # type: ignore
         self,
         func: Callable[..., Any | Runnable] | None,
         afunc: Callable[..., Awaitable[Any | Runnable]] | None = None,
@@ -270,13 +270,13 @@ class RunnableCallable(Runnable):
         if self.name is None:
             if func:
                 try:
-                    if func.__name__ != "<lambda>":
-                        self.name = func.__name__
+                    if func.__name__ != "<lambda>":  # type: ignore
+                        self.name = func.__name__  # type: ignore
                 except AttributeError:
                     pass
             elif afunc:
                 try:
-                    self.name = afunc.__name__
+                    self.name = afunc.__name__  # type: ignore
                 except AttributeError:
                     pass
         self.func = func
@@ -498,7 +498,7 @@ def is_async_generator(
     )
 
 
-def coerce_to_runnable(
+def coerce_to_runnable(  # type: ignore
     thing: RunnableLike, *, name: str | None, trace: bool
 ) -> Runnable:
     """Coerce a runnable-like object into a Runnable.
@@ -539,7 +539,7 @@ class RunnableSeq(Runnable):
     LangGraph.
     """
 
-    def __init__(
+    def __init__(  # type: ignore
         self,
         *steps: RunnableLike,
         name: str | None = None,
@@ -570,7 +570,7 @@ class RunnableSeq(Runnable):
         self.name = name
         self.trace_inputs = trace_inputs
 
-    def __or__(
+    def __or__(  # type: ignore
         self,
         other: Any,
     ) -> Runnable:
@@ -595,7 +595,7 @@ class RunnableSeq(Runnable):
                 name=self.name,
             )
 
-    def __ror__(
+    def __ror__(  # type: ignore
         self,
         other: Any,
     ) -> Runnable:
@@ -766,7 +766,7 @@ class RunnableSeq(Runnable):
                 if _StreamingCallbackHandler is not None:
                     for h in run_manager.handlers:
                         if isinstance(h, _StreamingCallbackHandler):
-                            iterator = h.tap_output_iter(run_manager.run_id, iterator)
+                            iterator = h.tap_output_iter(run_manager.run_id, iterator)  # type: ignore
                 # consume into final output
                 output = context.run(_consume_iter, iterator)
                 # sequence doesn't emit output, yield to mark as generator
@@ -865,7 +865,7 @@ class RunnableSeq(Runnable):
                         for h in run_manager.handlers:
                             if isinstance(h, _StreamingCallbackHandler):
                                 aiterator = h.tap_output_aiter(
-                                    run_manager.run_id, aiterator
+                                    run_manager.run_id, aiterator  # type: ignore
                                 )
                     # consume into final output
                     output = await _consume_aiter(aiterator)

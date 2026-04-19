@@ -865,7 +865,7 @@ class Pregel(
 
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=LangGraphDeprecatedSinceV10)
-            schema = self.config_schema(include=include)
+            schema = self.config_schema(include=include)  # type: ignore
         return schema.model_json_schema()
 
     def get_context_jsonschema(self) -> dict[str, Any] | None:
@@ -1013,7 +1013,7 @@ class Pregel(
     def _migrate_checkpoint(self, checkpoint: Checkpoint) -> None:
         """Migrate a saved checkpoint to new channel layout."""
         if checkpoint["v"] < 4 and checkpoint.get("pending_sends"):
-            pending_sends: list[Send] = checkpoint.pop("pending_sends")
+            pending_sends: list[Send] = checkpoint.pop("pending_sends")  # type: ignore
             checkpoint["channel_values"][TASKS] = pending_sends
             checkpoint["channel_versions"][TASKS] = max(
                 checkpoint["channel_versions"].values()
@@ -1456,7 +1456,7 @@ class Pregel(
                 checkpoint_tuple.config, checkpoint_tuple
             )
 
-    def bulk_update_state(
+    def bulk_update_state(  # type: ignore
         self,
         config: RunnableConfig,
         supersteps: Sequence[Sequence[StateUpdate]],
@@ -1902,7 +1902,7 @@ class Pregel(
             current_config = perform_superstep(current_config, superstep)
         return current_config
 
-    async def abulk_update_state(
+    async def abulk_update_state(  # type: ignore
         self,
         config: RunnableConfig,
         supersteps: Sequence[Sequence[StateUpdate]],
@@ -2405,7 +2405,7 @@ class Pregel(
         else:
             stream_modes = set(stream_mode)
         if isinstance(print_mode, str):
-            stream_modes.add(print_mode)
+            stream_modes.add(print_mode)  # type: ignore
         else:
             stream_modes.update(print_mode)
         if self.checkpointer is False:
@@ -2433,7 +2433,7 @@ class Pregel(
             cache = self.cache
         if durability is None:
             durability = config.get(CONF, {}).get(CONFIG_KEY_DURABILITY, "async")
-        return (
+        return (  # type: ignore
             stream_modes,
             output_keys,
             interrupt_before,
@@ -2655,7 +2655,7 @@ class Pregel(
             server_info = _build_server_info(config, parent_runtime)
 
             runtime = Runtime(
-                context=_coerce_context(self.context_schema, context),
+                context=_coerce_context(self.context_schema, context),  # type: ignore
                 store=store,
                 stream_writer=stream_writer,
                 previous=None,
@@ -2802,7 +2802,7 @@ class Pregel(
     ) -> AsyncIterator[StreamPart[StateT, OutputT]]: ...
 
     @overload
-    def astream(
+    def astream(  # type: ignore
         self,
         input: InputT | Command | None,
         config: RunnableConfig | None = None,
@@ -3028,7 +3028,7 @@ class Pregel(
             server_info = _build_server_info(config, parent_runtime)
 
             runtime = Runtime(
-                context=_coerce_context(self.context_schema, context),
+                context=_coerce_context(self.context_schema, context),  # type: ignore
                 store=store,
                 stream_writer=stream_writer,
                 previous=None,
@@ -3108,7 +3108,7 @@ class Pregel(
                         # Try to wake via semaphore like SyncPregelLoop
                         with contextlib.suppress(Exception):
                             if hasattr(stream, "_count"):
-                                stream._count.release()
+                                stream._count.release()  # type: ignore
                         t = waiter
                         waiter = None
                         if t is not None and not t.done():
@@ -3525,10 +3525,10 @@ class Pregel(
         """Clear the cache for the given nodes."""
         if not self.cache:
             raise ValueError("No cache is set for this graph. Cannot clear cache.")
-        nodes = nodes or self.nodes.keys()
+        nodes = nodes or self.nodes.keys()  # type: ignore
         # collect namespaces to clear
         namespaces: list[tuple[str, ...]] = []
-        for node in nodes:
+        for node in nodes:  # type: ignore
             if node in self.nodes:
                 namespaces.append(
                     (
@@ -3544,10 +3544,10 @@ class Pregel(
         """Asynchronously clear the cache for the given nodes."""
         if not self.cache:
             raise ValueError("No cache is set for this graph. Cannot clear cache.")
-        nodes = nodes or self.nodes.keys()
+        nodes = nodes or self.nodes.keys()  # type: ignore
         # collect namespaces to clear
         namespaces: list[tuple[str, ...]] = []
-        for node in nodes:
+        for node in nodes:  # type: ignore
             if node in self.nodes:
                 namespaces.append(
                     (
@@ -3688,7 +3688,7 @@ def _build_server_info(
     return None
 
 
-def _coerce_context(
+def _coerce_context(  # type: ignore
     context_schema: type[ContextT] | None, context: Any
 ) -> ContextT | None:
     """Coerce context input to the appropriate schema type.

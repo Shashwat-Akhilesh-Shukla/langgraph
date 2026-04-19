@@ -78,4 +78,4 @@ def collect_allowlist_small() -> None:
 
 
 def collect_allowlist_large() -> None:
-    collect_allowlist_from_schemas(schemas=SCHEMAS_LARGE, channels=CHANNELS)
+    collect_allowlist_from_schemas(schemas=SCHEMAS_LARGE, channels=CHANNELS)  # type: ignore

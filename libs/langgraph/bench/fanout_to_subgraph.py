@@ -38,7 +38,7 @@ def fanout_to_subgraph() -> StateGraph:
         return END if state["jokes"][0].endswith(" a" * 10) else "bump"
 
     # subgraph
-    subgraph = StateGraph(JokeState, input_schema=JokeInput, output_schema=JokeOutput)
+    subgraph = StateGraph(JokeState, input_schema=JokeInput, output_schema=JokeOutput)  # type: ignore
     subgraph.add_node("edit", edit)
     subgraph.add_node("generate", generate)
     subgraph.add_node("bump", bump)
@@ -50,12 +50,12 @@ def fanout_to_subgraph() -> StateGraph:
     subgraphc = subgraph.compile()
 
     # parent graph
-    builder = StateGraph(OverallState)
+    builder = StateGraph(OverallState)  # type: ignore
     builder.add_node("generate_joke", subgraphc)
     builder.add_conditional_edges(START, continue_to_jokes)
     builder.add_edge("generate_joke", END)
 
-    return builder
+    return builder  # type: ignore
 
 
 def fanout_to_subgraph_sync() -> StateGraph:
@@ -88,7 +88,7 @@ def fanout_to_subgraph_sync() -> StateGraph:
         return END if state["jokes"][0].endswith(" a" * 10) else "bump"
 
     # subgraph
-    subgraph = StateGraph(JokeState, input_schema=JokeInput, output_schema=JokeOutput)
+    subgraph = StateGraph(JokeState, input_schema=JokeInput, output_schema=JokeOutput)  # type: ignore
     subgraph.add_node("edit", edit)
     subgraph.add_node("generate", generate)
     subgraph.add_node("bump", bump)
@@ -100,12 +100,12 @@ def fanout_to_subgraph_sync() -> StateGraph:
     subgraphc = subgraph.compile()
 
     # parent graph
-    builder = StateGraph(OverallState)
+    builder = StateGraph(OverallState)  # type: ignore
     builder.add_node("generate_joke", subgraphc)
     builder.add_conditional_edges(START, continue_to_jokes)
     builder.add_edge("generate_joke", END)
 
-    return builder
+    return builder  # type: ignore
 
 
 if __name__ == "__main__":
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     import random
     import time
 
-    import uvloop
+    import uvloop  # type: ignore
     from langgraph.checkpoint.memory import InMemorySaver
 
     graph = fanout_to_subgraph().compile(checkpointer=InMemorySaver())
@@ -125,7 +125,7 @@ if __name__ == "__main__":
     config = {"configurable": {"thread_id": "1"}}
 
     async def run():
-        len([c async for c in graph.astream(input, config=config)])
+        len([c async for c in graph.astream(input, config=config)])  # type: ignore
 
     uvloop.install()
     start = time.time()

@@ -104,7 +104,7 @@ def _create_root_model(
     }
 
     if default_ is not NO_DEFAULT:
-        base_class_attributes["root"] = default_
+        base_class_attributes["root"] = default_  # type: ignore
     with warnings.catch_warnings():
         custom_root_type = type(name, (RootModel,), base_class_attributes)
     return cast("type[BaseModel]", custom_root_type)

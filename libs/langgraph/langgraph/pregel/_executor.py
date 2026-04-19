@@ -29,7 +29,7 @@ class Submit(Protocol[P, T]):
         self,
         fn: Callable[P, T],
         *args: P.args,
-        __name__: str | None = None,
+        __name__: str | None = None,  # type: ignore
         __cancel_on_exit__: bool = False,
         __reraise_on_exit__: bool = True,
         __next_tick__: bool = False,
@@ -55,7 +55,7 @@ class BackgroundExecutor(AbstractContextManager):
         self,
         fn: Callable[P, T],
         *args: P.args,
-        __name__: str | None = None,  # currently not used in sync version
+        __name__: str | None = None,  # currently not used in sync version  # type: ignore
         __cancel_on_exit__: bool = False,  # for sync, can cancel only if not started
         __reraise_on_exit__: bool = True,
         __next_tick__: bool = False,
@@ -72,7 +72,7 @@ class BackgroundExecutor(AbstractContextManager):
         self.tasks[task] = (__cancel_on_exit__, __reraise_on_exit__)
         # add a callback to remove the task from the tasks dict when it's done
         task.add_done_callback(self.done)
-        return task
+        return task  # type: ignore
 
     def done(self, task: concurrent.futures.Future) -> None:
         """Remove the task from the tasks dict when it's done."""
@@ -87,7 +87,7 @@ class BackgroundExecutor(AbstractContextManager):
         else:
             self.tasks.pop(task)
 
-    def __enter__(self) -> Submit:
+    def __enter__(self) -> Submit:  # type: ignore
         return self.submit
 
     def __exit__(
@@ -143,7 +143,7 @@ class AsyncBackgroundExecutor(AbstractAsyncContextManager):
         self,
         fn: Callable[P, Awaitable[T]],
         *args: P.args,
-        __name__: str | None = None,
+        __name__: str | None = None,  # type: ignore
         __cancel_on_exit__: bool = False,
         __reraise_on_exit__: bool = True,
         __next_tick__: bool = False,  # noop in async (always True)
@@ -180,7 +180,7 @@ class AsyncBackgroundExecutor(AbstractAsyncContextManager):
         except asyncio.CancelledError:
             self.tasks.pop(task)
 
-    async def __aenter__(self) -> Submit:
+    async def __aenter__(self) -> Submit:  # type: ignore
         return self.submit
 
     async def __aexit__(

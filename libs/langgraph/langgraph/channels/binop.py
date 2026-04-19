@@ -57,11 +57,11 @@ class BinaryOperatorAggregate(Generic[Value], BaseChannel[Value, Value, Value]):
         # so we need to replace them with their concrete counterparts
         typ = _strip_extras(typ)
         if typ in (collections.abc.Sequence, collections.abc.MutableSequence):
-            typ = list
+            typ = list  # type: ignore
         if typ in (collections.abc.Set, collections.abc.MutableSet):
-            typ = set
+            typ = set  # type: ignore
         if typ in (collections.abc.Mapping, collections.abc.MutableMapping):
-            typ = dict
+            typ = dict  # type: ignore
         try:
             self.value = typ()
         except Exception:
@@ -70,8 +70,8 @@ class BinaryOperatorAggregate(Generic[Value], BaseChannel[Value, Value, Value]):
     def __eq__(self, value: object) -> bool:
         return isinstance(value, BinaryOperatorAggregate) and (
             value.operator is self.operator
-            if value.operator.__name__ != "<lambda>"
-            and self.operator.__name__ != "<lambda>"
+            if value.operator.__name__ != "<lambda>"  # type: ignore
+            and self.operator.__name__ != "<lambda>"  # type: ignore
             else True
         )
 
@@ -119,10 +119,10 @@ class BinaryOperatorAggregate(Generic[Value], BaseChannel[Value, Value, Value]):
                 seen_overwrite = True
                 continue
             if not seen_overwrite:
-                self.value = self.operator(self.value, value)
+                self.value = self.operator(self.value, value)  # type: ignore
         return True
 
-    def get(self) -> Value:
+    def get(self) -> Value:  # type: ignore
         if self.value is MISSING:
             raise EmptyChannelError()
         return self.value
@@ -130,5 +130,5 @@ class BinaryOperatorAggregate(Generic[Value], BaseChannel[Value, Value, Value]):
     def is_available(self) -> bool:
         return self.value is not MISSING
 
-    def checkpoint(self) -> Value:
+    def checkpoint(self) -> Value:  # type: ignore
         return self.value

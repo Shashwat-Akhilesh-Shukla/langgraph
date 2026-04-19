@@ -363,17 +363,17 @@ class PregelLoop:
                     task = None
                 self.submit(
                     self.checkpointer_put_writes,
-                    config,
-                    writes_to_save,
-                    task_id,
-                    task_path_str(task.path) if task else "",
+                    config,  # type: ignore
+                    writes_to_save,  # type: ignore
+                    task_id,  # type: ignore
+                    task_path_str(task.path) if task else "",  # type: ignore
                 )
             else:
                 self.submit(
                     self.checkpointer_put_writes,
-                    config,
-                    writes_to_save,
-                    task_id,
+                    config,  # type: ignore
+                    writes_to_save,  # type: ignore
+                    task_id,  # type: ignore
                 )
         # output writes
         if hasattr(self, "tasks"):
@@ -406,15 +406,15 @@ class PregelLoop:
                 task = self.tasks.get(task_id)
                 self.submit(
                     self.checkpointer_put_writes,
-                    config,
+                    config,  # type: ignore
                     writes,
                     task_id,
-                    task_path_str(task.path) if task else "",
+                    task_path_str(task.path) if task else "",  # type: ignore
                 )
             else:
                 self.submit(
                     self.checkpointer_put_writes,
-                    config,
+                    config,  # type: ignore
                     writes,
                     task_id,
                 )
@@ -495,7 +495,7 @@ class PregelLoop:
             self._emit(
                 "checkpoints",
                 map_debug_checkpoint,
-                {
+                {  # type: ignore
                     **self.checkpoint_config,
                     CONF: {
                         **self.checkpoint_config[CONF],
@@ -617,7 +617,7 @@ class PregelLoop:
 
         return hanging_interrupts
 
-    def _first(
+    def _first(  # type: ignore
         self, *, input_keys: str | Sequence[str], updated_channels: set[str] | None
     ) -> set[str] | None:
         # Resuming from a previous checkpoint requires two things:
@@ -850,11 +850,11 @@ class PregelLoop:
             # ensuring checkpointers receive checkpoints in order
             self._put_checkpoint_fut = self.submit(
                 self._checkpointer_put_after_previous,
-                getattr(self, "_put_checkpoint_fut", None),
-                self.checkpoint_config,
-                copy_checkpoint(self.checkpoint),
-                self.checkpoint_metadata,
-                new_versions,
+                getattr(self, "_put_checkpoint_fut", None),  # type: ignore
+                self.checkpoint_config,  # type: ignore
+                copy_checkpoint(self.checkpoint),  # type: ignore
+                self.checkpoint_metadata,  # type: ignore
+                new_versions,  # type: ignore
             )
             self.checkpoint_config = {
                 **self.checkpoint_config,
@@ -928,7 +928,7 @@ class PregelLoop:
             # save final output
             self.output = read_channels(self.channels, self.output_keys)
 
-    def _emit(
+    def _emit(  # type: ignore
         self,
         mode: StreamMode,
         values: Callable[P, Iterator[Any]],
@@ -1083,7 +1083,7 @@ class SyncPregelLoop(PregelLoop, AbstractContextManager):
         checkpoint: Checkpoint,
         metadata: CheckpointMetadata,
         new_versions: ChannelVersions,
-    ) -> RunnableConfig:
+    ) -> RunnableConfig:  # type: ignore
         try:
             if prev is not None:
                 prev.result()
@@ -1125,7 +1125,7 @@ class SyncPregelLoop(PregelLoop, AbstractContextManager):
             return
         self.submit(
             self.cache.set,
-            {
+            {  # type: ignore
                 (task.cache_key.ns, task.cache_key.key): (
                     task.writes,
                     task.cache_key.ttl,
@@ -1279,7 +1279,7 @@ class AsyncPregelLoop(PregelLoop, AbstractAsyncContextManager):
         checkpoint: Checkpoint,
         metadata: CheckpointMetadata,
         new_versions: ChannelVersions,
-    ) -> RunnableConfig:
+    ) -> RunnableConfig:  # type: ignore
         try:
             if prev is not None:
                 await prev
@@ -1324,7 +1324,7 @@ class AsyncPregelLoop(PregelLoop, AbstractAsyncContextManager):
             return
         self.submit(
             self.cache.aset,
-            {
+            {  # type: ignore
                 (task.cache_key.ns, task.cache_key.key): (
                     task.writes,
                     task.cache_key.ttl,

@@ -9,14 +9,14 @@ from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 from langchain_core.outputs import ChatGeneration, ChatResult
 from langchain_core.tools import StructuredTool
 from langgraph.checkpoint.base import BaseCheckpointSaver
-from langgraph.prebuilt.chat_agent_executor import create_react_agent
+from langgraph.prebuilt.chat_agent_executor import create_react_agent  # type: ignore
 
 from langgraph.pregel import Pregel
 
 
 def react_agent(n_tools: int, checkpointer: BaseCheckpointSaver | None) -> Pregel:
     class FakeFunctionChatModel(FakeMessagesListChatModel):
-        def bind_tools(self, functions: list):
+        def bind_tools(self, functions: list):  # type: ignore
             return self
 
         def _generate(
@@ -26,7 +26,7 @@ def react_agent(n_tools: int, checkpointer: BaseCheckpointSaver | None) -> Prege
             run_manager: CallbackManagerForLLMRun | None = None,
             **kwargs: Any,
         ) -> ChatResult:
-            response = self.responses[self.i].copy()
+            response = self.responses[self.i].copy()  # type: ignore
             if self.i < len(self.responses) - 1:
                 self.i += 1
             else:
@@ -60,13 +60,13 @@ def react_agent(n_tools: int, checkpointer: BaseCheckpointSaver | None) -> Prege
         ]
     )
 
-    return create_react_agent(model, [tool], checkpointer=checkpointer)
+    return create_react_agent(model, [tool], checkpointer=checkpointer)  # type: ignore
 
 
 if __name__ == "__main__":
     import asyncio
 
-    import uvloop
+    import uvloop  # type: ignore
     from langgraph.checkpoint.memory import InMemorySaver
 
     graph = react_agent(100, checkpointer=InMemorySaver())
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     config = {"configurable": {"thread_id": "1"}, "recursion_limit": 20000000000}
 
     async def run():
-        len([c async for c in graph.astream(input, config=config)])
+        len([c async for c in graph.astream(input, config=config)])  # type: ignore
 
     uvloop.install()
     asyncio.run(run())

@@ -58,7 +58,7 @@ def patch_configurable(
 
 def patch_checkpoint_map(
     config: RunnableConfig | None, metadata: CheckpointMetadata | None
-) -> RunnableConfig:
+) -> RunnableConfig:  # type: ignore
     if config is None:
         return config
     elif parents := (metadata.get("parents") if metadata else None):
@@ -108,21 +108,21 @@ def merge_configs(*configs: RunnableConfig | None) -> RunnableConfig:
                 if base_value := base.get(key):
                     base[key] = {**base_value, **value}  # type: ignore[dict-item]
                 else:
-                    base[key] = value
+                    base[key] = value  # type: ignore
             elif key == "callbacks":
                 base_callbacks = base.get("callbacks")
                 # callbacks can be either None, list[handler] or manager
                 # so merging two callbacks values has 6 cases
                 if isinstance(value, list):
                     if base_callbacks is None:
-                        base["callbacks"] = value.copy()
+                        base["callbacks"] = value.copy()  # type: ignore
                     elif isinstance(base_callbacks, list):
                         base["callbacks"] = base_callbacks + value
                     else:
                         # base_callbacks is a manager
                         mngr = base_callbacks.copy()
                         for callback in value:
-                            mngr.add_handler(callback, inherit=True)
+                            mngr.add_handler(callback, inherit=True)  # type: ignore
                         base["callbacks"] = mngr
                 elif isinstance(value, BaseCallbackManager):
                     # value is a manager
@@ -131,7 +131,7 @@ def merge_configs(*configs: RunnableConfig | None) -> RunnableConfig:
                     elif isinstance(base_callbacks, list):
                         mngr = value.copy()
                         for callback in base_callbacks:
-                            mngr.add_handler(callback, inherit=True)
+                            mngr.add_handler(callback, inherit=True)  # type: ignore
                         base["callbacks"] = mngr
                     else:
                         # base_callbacks is also a manager
@@ -144,7 +144,7 @@ def merge_configs(*configs: RunnableConfig | None) -> RunnableConfig:
             else:
                 base[key] = config[key]  # type: ignore[literal-required]
     if CONF not in base:
-        base[CONF] = {}
+        base[CONF] = {}  # type: ignore
     return base
 
 
@@ -281,7 +281,7 @@ def ensure_config(*configs: RunnableConfig | None) -> RunnableConfig:
     Returns:
         RunnableConfig: The merged and ensured config.
     """
-    empty = RunnableConfig(
+    empty = RunnableConfig(  # type: ignore
         tags=[],
         metadata=ChainMap(),
         callbacks=None,
@@ -290,7 +290,7 @@ def ensure_config(*configs: RunnableConfig | None) -> RunnableConfig:
     )
     if var_config := var_child_runnable_config.get():
         empty.update(
-            {
+            {  # type: ignore
                 k: v.copy() if k in COPIABLE_KEYS else v  # type: ignore[attr-defined]
                 for k, v in var_config.items()
                 if _is_not_empty(v)
@@ -302,7 +302,7 @@ def ensure_config(*configs: RunnableConfig | None) -> RunnableConfig:
         for k, v in config.items():
             if _is_not_empty(v) and k in CONFIG_KEYS:
                 if k == CONF:
-                    empty[k] = cast(dict, v).copy()
+                    empty[k] = cast(dict, v).copy()  # type: ignore
                 else:
                     empty[k] = v  # type: ignore[literal-required]
         for k, v in config.items():

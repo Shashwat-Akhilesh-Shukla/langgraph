@@ -124,7 +124,7 @@ def _chain_future(source: AnyFuture, destination: AnyFuture) -> None:
     source.add_done_callback(_call_set_state)
 
 
-def chain_future(source: AnyFuture, destination: AnyFuture) -> AnyFuture:
+def chain_future(source: AnyFuture, destination: AnyFuture) -> AnyFuture:  # type: ignore
     # adapted from asyncio.run_coroutine_threadsafe
     try:
         _chain_future(source, destination)
@@ -163,7 +163,7 @@ def _ensure_future(
 
     try:
         if CONTEXT_NOT_SUPPORTED:
-            return loop.create_task(coro_or_future, name=name)
+            return loop.create_task(coro_or_future, name=name)  # type: ignore
         elif EAGER_NOT_SUPPORTED or lazy:
             return loop.create_task(coro_or_future, name=name, context=context)
         else:

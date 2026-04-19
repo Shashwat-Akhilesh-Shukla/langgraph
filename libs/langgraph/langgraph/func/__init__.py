@@ -60,10 +60,10 @@ class _TaskFunction(Generic[P, T]):
                 # the original class method in case it's shared across multiple tasks
                 instance_method = functools.partial(func.__func__, func.__self__)  # type: ignore [union-attr]
                 instance_method.__name__ = name  # type: ignore [attr-defined]
-                func = instance_method
+                func = instance_method  # type: ignore
             else:
                 # handle regular functions / partials / callable classes, etc.
-                func.__name__ = name
+                func.__name__ = name  # type: ignore
         self.func = func
         self.retry_policy = retry_policy
         self.cache_policy = cache_policy
@@ -213,9 +213,9 @@ def task(
         )
 
     if __func_or_none__ is not None:
-        return decorator(__func_or_none__)
+        return decorator(__func_or_none__)  # type: ignore
 
-    return decorator
+    return decorator  # type: ignore
 
 
 R = TypeVar("R")
@@ -531,7 +531,7 @@ class entrypoint(Generic[ContextT]):
 
         graph: Pregel[Any, ContextT, Any, Any] = Pregel(
             nodes={
-                func.__name__: PregelNode(
+                func.__name__: PregelNode(  # type: ignore
                     bound=bound,
                     triggers=[START],
                     channels=START,
@@ -572,4 +572,4 @@ class entrypoint(Generic[ContextT]):
             graph.checkpointer = _serde.apply_checkpointer_allowlist(
                 graph.checkpointer, serde_allowlist
             )
-        return graph
+        return graph  # type: ignore

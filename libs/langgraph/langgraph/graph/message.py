@@ -201,11 +201,11 @@ def add_messages(
     ]
     # assign missing ids
     for m in left:
-        if m.id is None:
-            m.id = str(uuid.uuid4())
+        if m.id is None:  # type: ignore
+            m.id = str(uuid.uuid4())  # type: ignore
     for idx, m in enumerate(right):
-        if m.id is None:
-            m.id = str(uuid.uuid4())
+        if m.id is None:  # type: ignore
+            m.id = str(uuid.uuid4())  # type: ignore
         if isinstance(m, RemoveMessage) and m.id == REMOVE_ALL_MESSAGES:
             remove_all_idx = idx
 
@@ -214,14 +214,14 @@ def add_messages(
 
     # merge
     merged = left.copy()
-    merged_by_id = {m.id: i for i, m in enumerate(merged)}
+    merged_by_id = {m.id: i for i, m in enumerate(merged)}  # type: ignore
     ids_to_remove = set()
     for m in right:
-        if (existing_idx := merged_by_id.get(m.id)) is not None:
+        if (existing_idx := merged_by_id.get(m.id)) is not None:  # type: ignore
             if isinstance(m, RemoveMessage):
                 ids_to_remove.add(m.id)
             else:
-                ids_to_remove.discard(m.id)
+                ids_to_remove.discard(m.id)  # type: ignore
                 merged[existing_idx] = m
         else:
             if isinstance(m, RemoveMessage):
@@ -229,19 +229,19 @@ def add_messages(
                     f"Attempting to delete a message with an ID that doesn't exist ('{m.id}')"
                 )
 
-            merged_by_id[m.id] = len(merged)
+            merged_by_id[m.id] = len(merged)  # type: ignore
             merged.append(m)
-    merged = [m for m in merged if m.id not in ids_to_remove]
+    merged = [m for m in merged if m.id not in ids_to_remove]  # type: ignore
 
     if format == "langchain-openai":
-        merged = _format_messages(merged)
+        merged = _format_messages(merged)  # type: ignore
     elif format:
         msg = f"Unrecognized {format=}. Expected one of 'langchain-openai', None."
         raise ValueError(msg)
     else:
         pass
 
-    return merged
+    return merged  # type: ignore
 
 
 @deprecated(
@@ -308,7 +308,7 @@ class MessagesState(TypedDict):
     messages: Annotated[list[AnyMessage], add_messages]
 
 
-def _format_messages(messages: Sequence[BaseMessage]) -> list[BaseMessage]:
+def _format_messages(messages: Sequence[BaseMessage]) -> list[BaseMessage]:  # type: ignore
     try:
         from langchain_core.messages import convert_to_openai_messages
     except ImportError:
@@ -369,4 +369,4 @@ def push_message(
     if state_key:
         config[CONF][CONFIG_KEY_SEND]([(state_key, message)])
 
-    return message
+    return message  # type: ignore

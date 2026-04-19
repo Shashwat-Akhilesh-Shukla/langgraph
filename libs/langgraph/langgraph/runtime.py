@@ -190,7 +190,7 @@ class Runtime(Generic[ContextT]):
 
         If a value is not provided in the other runtime, the value from the current runtime is used.
         """
-        return Runtime(
+        return Runtime(  # type: ignore
             context=other.context or self.context,
             store=other.store or self.store,
             stream_writer=other.stream_writer

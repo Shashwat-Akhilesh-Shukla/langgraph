@@ -99,9 +99,9 @@ class FuturesDict(Generic[F, E], dict[F, PregelExecutableTask | None]):
         super().__setitem__(key, value)  # type: ignore[index]
         if value is not None:
             with self.lock:
-                self.event.clear()
+                self.event.clear()  # type: ignore
                 self.counter += 1
-            key.add_done_callback(partial(self.on_done, value))
+            key.add_done_callback(partial(self.on_done, value))  # type: ignore
 
     def on_done(
         self,
@@ -116,7 +116,7 @@ class FuturesDict(Generic[F, E], dict[F, PregelExecutableTask | None]):
                 self.done.add(fut)
                 self.counter -= 1
                 if self.counter == 0 or _should_stop_others(self.done):
-                    self.event.set()
+                    self.event.set()  # type: ignore
 
 
 class PregelRunner:
@@ -206,9 +206,9 @@ class PregelRunner:
         for t in tasks:
             fut = self.submit()(  # type: ignore[misc]
                 run_with_retry,
-                t,
-                retry_policy,
-                configurable={
+                t,  # type: ignore
+                retry_policy,  # type: ignore
+                configurable={  # type: ignore
                     CONFIG_KEY_CALL: partial(
                         _call,
                         weakref.ref(t),
@@ -348,10 +348,10 @@ class PregelRunner:
                 asyncio.Future,
                 self.submit()(  # type: ignore[misc]
                     arun_with_retry,
-                    t,
-                    retry_policy,
-                    stream=self.use_astream,
-                    configurable={
+                    t,  # type: ignore
+                    retry_policy,  # type: ignore
+                    stream=self.use_astream,  # type: ignore
+                    configurable={  # type: ignore
                         CONFIG_KEY_CALL: partial(
                             _acall,
                             weakref.ref(t),
@@ -438,7 +438,7 @@ class PregelRunner:
                 if exception.args[0]:
                     writes = [(INTERRUPT, exception.args[0])]
                     if resumes := [w for w in task.writes if w[0] == RESUME]:
-                        writes.extend(resumes)
+                        writes.extend(resumes)  # type: ignore
                     self.put_writes()(task.id, writes)  # type: ignore[misc]
             elif isinstance(exception, GraphBubbleUp):
                 # exception will be raised in _panic_or_proceed
@@ -465,9 +465,9 @@ def _should_stop_others(
     """Check if any task failed, if so, cancel all other tasks.
     GraphInterrupts are not considered failures."""
     for fut in done:
-        if fut.cancelled():
+        if fut.cancelled():  # type: ignore
             continue
-        elif exc := fut.exception():
+        elif exc := fut.exception():  # type: ignore
             if not isinstance(exc, GraphBubbleUp) and fut not in SKIP_RERAISE_SET:
                 return True
 
@@ -589,9 +589,9 @@ def _call(
             # schedule the next task
             fut = submit()(  # type: ignore[misc]
                 run_with_retry,
-                next_task,
-                retry_policy,
-                configurable={
+                next_task,  # type: ignore
+                retry_policy,  # type: ignore
+                configurable={  # type: ignore
                     CONFIG_KEY_CALL: partial(
                         _call,
                         weakref.ref(next_task),
@@ -611,10 +611,10 @@ def _call(
             # so we should not re-raise at the end of the tick
             SKIP_RERAISE_SET.add(fut)
             futures()[fut] = next_task  # type: ignore[index]
-    fut = cast(asyncio.Future | concurrent.futures.Future, fut)
+    fut = cast(asyncio.Future | concurrent.futures.Future, fut)  # type: ignore
     # return a chained future to ensure commit() callback is called
     # before the returned future is resolved, to ensure stream order etc
-    return chain_future(fut, concurrent.futures.Future())
+    return chain_future(fut, concurrent.futures.Future())  # type: ignore
 
 
 def _acall(
@@ -734,10 +734,10 @@ async def _acall_impl(
                     asyncio.Future,
                     submit()(  # type: ignore[misc]
                         arun_with_retry,
-                        next_task,
-                        retry_policy,
-                        stream=stream,
-                        configurable={
+                        next_task,  # type: ignore
+                        retry_policy,  # type: ignore
+                        stream=stream,  # type: ignore
+                        configurable={  # type: ignore
                             CONFIG_KEY_CALL: partial(
                                 _acall,
                                 weakref.ref(next_task),

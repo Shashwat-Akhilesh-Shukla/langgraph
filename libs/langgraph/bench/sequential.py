@@ -6,7 +6,7 @@ from langgraph.graph import MessagesState, StateGraph
 
 def create_sequential(number_nodes: int) -> StateGraph:
     """Create a sequential no-op graph consisting of a few hundred nodes."""
-    builder = StateGraph(MessagesState)
+    builder = StateGraph(MessagesState)  # type: ignore
 
     def noop(state: MessagesState) -> None:
         """No-op function."""
@@ -25,21 +25,21 @@ def create_sequential(number_nodes: int) -> StateGraph:
         prev_node = name
 
     builder.add_edge(prev_node, "__end__")
-    return builder
+    return builder  # type: ignore
 
 
 if __name__ == "__main__":
     import asyncio
     import time
 
-    import uvloop
+    import uvloop  # type: ignore
 
     graph = create_sequential(3000).compile()
     input = {"messages": []}  # Empty list of messages
     config = {"recursion_limit": 20000000000}
 
     async def run():
-        len([c async for c in graph.astream(input, config=config)])
+        len([c async for c in graph.astream(input, config=config)])  # type: ignore
 
     uvloop.install()
     start = time.time()

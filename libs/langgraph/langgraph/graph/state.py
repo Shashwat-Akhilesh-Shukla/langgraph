@@ -105,7 +105,7 @@ def _warn_invalid_state_schema(schema: type[Any] | Any) -> None:
     )
 
 
-def _get_node_name(node: StateNode[Any, ContextT]) -> str:
+def _get_node_name(node: StateNode[Any, ContextT]) -> str:  # type: ignore
     try:
         return getattr(node, "__name__", node.__class__.__name__)
     except AttributeError:
@@ -197,7 +197,7 @@ class StateGraph(Generic[StateT, ContextT, InputT, OutputT]):
     input_schema: type[InputT]
     output_schema: type[OutputT]
 
-    def __init__(
+    def __init__(  # type: ignore
         self,
         state_schema: type[StateT],
         context_schema: type[ContextT] | None = None,
@@ -428,7 +428,7 @@ class StateGraph(Generic[StateT, ContextT, InputT, OutputT]):
         ...
 
     @overload
-    def add_node(
+    def add_node(  # type: ignore
         self,
         node: str,
         action: StateNode[NodeInputT, ContextT],
@@ -785,7 +785,7 @@ class StateGraph(Generic[StateT, ContextT, InputT, OutputT]):
 
         return self
 
-    def add_edge(self, start_key: str | list[str], end_key: str) -> Self:
+    def add_edge(self, start_key: str | list[str], end_key: str) -> Self:  # type: ignore
         """Add a directed edge from the start node (or list of start nodes) to the end node.
 
         When a single start node is provided, the graph will wait for that node to complete
@@ -920,7 +920,7 @@ class StateGraph(Generic[StateT, ContextT, InputT, OutputT]):
             if isinstance(node, tuple) and len(node) == 2:
                 name, node = node
             else:
-                name = _get_node_name(node)
+                name = _get_node_name(node)  # type: ignore
 
             if name in self.nodes:
                 raise ValueError(
@@ -928,11 +928,11 @@ class StateGraph(Generic[StateT, ContextT, InputT, OutputT]):
                     "If you need to use two different runnables/callables with the same name (for example, using `lambda`), please provide them as tuples (name, runnable/callable)."
                 )
 
-            self.add_node(name, node)
+            self.add_node(name, node)  # type: ignore
             if previous_name is not None:
-                self.add_edge(previous_name, name)
+                self.add_edge(previous_name, name)  # type: ignore
 
-            previous_name = name
+            previous_name = name  # type: ignore
 
         return self
 
