@@ -203,8 +203,10 @@ class PregelRunner:
         if get_waiter is not None:
             futures[get_waiter()] = None
         # schedule tasks
+        if not (submit := self.submit()):
+            return
         for t in tasks:
-            fut = self.submit()(  # type: ignore[misc]
+            fut = submit(  # type: ignore[misc]
                 run_with_retry,
                 t,  # type: ignore
                 retry_policy,  # type: ignore
@@ -343,10 +345,12 @@ class PregelRunner:
         if get_waiter is not None:
             futures[get_waiter()] = None
         # schedule tasks
+        if not (submit := self.submit()):
+            return
         for t in tasks:
             fut = cast(
                 asyncio.Future,
-                self.submit()(  # type: ignore[misc]
+                submit(  # type: ignore[misc]
                     arun_with_retry,
                     t,  # type: ignore
                     retry_policy,  # type: ignore
@@ -427,11 +431,13 @@ class PregelRunner:
         task: PregelExecutableTask,
         exception: BaseException | None,
     ) -> None:
+        if not (put_writes := self.put_writes()):
+            return
         if isinstance(exception, asyncio.CancelledError):
             # for cancelled tasks, also save error in task,
             # so loop can finish super-step
             task.writes.append((ERROR, exception))
-            self.put_writes()(task.id, task.writes)  # type: ignore[misc]
+            put_writes(task.id, task.writes)
         elif exception:
             if isinstance(exception, GraphInterrupt):
                 # save interrupt to checkpointer
@@ -439,14 +445,14 @@ class PregelRunner:
                     writes = [(INTERRUPT, exception.args[0])]
                     if resumes := [w for w in task.writes if w[0] == RESUME]:
                         writes.extend(resumes)  # type: ignore
-                    self.put_writes()(task.id, writes)  # type: ignore[misc]
+                    put_writes(task.id, writes)
             elif isinstance(exception, GraphBubbleUp):
                 # exception will be raised in _panic_or_proceed
                 pass
             else:
                 # save error to checkpointer
                 task.writes.append((ERROR, exception))
-                self.put_writes()(task.id, task.writes)  # type: ignore[misc]
+                put_writes(task.id, task.writes)
         else:
             if self.node_finished and (
                 task.config is None or TAG_HIDDEN not in task.config.get("tags", [])
@@ -456,7 +462,7 @@ class PregelRunner:
                 # add no writes marker
                 task.writes.append((NO_WRITES, None))
             # save task writes to checkpointer
-            self.put_writes()(task.id, task.writes)  # type: ignore[misc]
+            put_writes(task.id, task.writes)
 
 
 def _should_stop_others(
@@ -549,10 +555,13 @@ def _call(
 
     fut: concurrent.futures.Future | None = None
     # schedule PUSH tasks, collect futures
-    scratchpad: PregelScratchpad = task().config[CONF][CONFIG_KEY_SCRATCHPAD]  # type: ignore[union-attr]
+    t = task()
+    if t is None:
+        raise RuntimeError("Task was garbage collected")
+    scratchpad: PregelScratchpad = t.config[CONF][CONFIG_KEY_SCRATCHPAD]
     # schedule the next task, if the callback returns one
     if next_task := schedule_task(
-        task(),  # type: ignore[arg-type]
+        t,
         scratchpad.call_counter(),
         Call(
             func,
@@ -587,30 +596,35 @@ def _call(
                 fut.set_result(None)
         else:
             # schedule the next task
-            fut = submit()(  # type: ignore[misc]
-                run_with_retry,
-                next_task,  # type: ignore
-                retry_policy,  # type: ignore
-                configurable={  # type: ignore
-                    CONFIG_KEY_CALL: partial(
-                        _call,
-                        weakref.ref(next_task),
-                        futures=futures,
-                        retry_policy=retry_policy,
-                        callbacks=callbacks,
-                        schedule_task=schedule_task,
-                        submit=submit,
-                    ),
-                },
-                __reraise_on_exit__=False,
-                # starting a new task in the next tick ensures
-                # updates from this tick are committed/streamed first
-                __next_tick__=True,
-            )
-            # exceptions for call() tasks are raised into the parent task
-            # so we should not re-raise at the end of the tick
-            SKIP_RERAISE_SET.add(fut)
-            futures()[fut] = next_task  # type: ignore[index]
+            if sub := submit():
+                fut = sub(  # type: ignore[misc]
+                    run_with_retry,
+                    next_task,  # type: ignore
+                    retry_policy,  # type: ignore
+                    configurable={  # type: ignore
+                        CONFIG_KEY_CALL: partial(
+                            _call,
+                            weakref.ref(next_task),
+                            futures=futures,
+                            retry_policy=retry_policy,
+                            callbacks=callbacks,
+                            schedule_task=schedule_task,
+                            submit=submit,
+                        ),
+                    },
+                    __reraise_on_exit__=False,
+                    # starting a new task in the next tick ensures
+                    # updates from this tick are committed/streamed first
+                    __next_tick__=True,
+                )
+                # exceptions for call() tasks are raised into the parent task
+                # so we should not re-raise at the end of the tick
+                SKIP_RERAISE_SET.add(fut)
+                if futs := futures():
+                    futs[fut] = next_task  # type: ignore[index]
+        if fut is None:
+            fut = concurrent.futures.Future()
+            fut.set_exception(RuntimeError("Task not scheduled"))
     fut = cast(asyncio.Future | concurrent.futures.Future, fut)  # type: ignore
     # return a chained future to ensure commit() callback is called
     # before the returned future is resolved, to ensure stream order etc
@@ -692,10 +706,13 @@ async def _acall_impl(
     try:
         fut: asyncio.Future | None = None
         # schedule PUSH tasks, collect futures
-        scratchpad: PregelScratchpad = task().config[CONF][CONFIG_KEY_SCRATCHPAD]  # type: ignore[union-attr]
+        t = task()
+        if t is None:
+            raise RuntimeError("Task was garbage collected")
+        scratchpad: PregelScratchpad = t.config[CONF][CONFIG_KEY_SCRATCHPAD]
         # schedule the next task, if the callback returns one
         if next_task := await schedule_task(
-            task(),  # type: ignore[arg-type]
+            t,
             scratchpad.call_counter(),
             Call(
                 func,
@@ -730,36 +747,38 @@ async def _acall_impl(
                     fut.set_result(None)
             else:
                 # schedule the next task
-                fut = cast(
-                    asyncio.Future,
-                    submit()(  # type: ignore[misc]
-                        arun_with_retry,
-                        next_task,  # type: ignore
-                        retry_policy,  # type: ignore
-                        stream=stream,  # type: ignore
-                        configurable={  # type: ignore
-                            CONFIG_KEY_CALL: partial(
-                                _acall,
-                                weakref.ref(next_task),
-                                stream=stream,
-                                futures=futures,
-                                schedule_task=schedule_task,
-                                submit=submit,
-                                loop=loop,
-                            ),
-                        },
-                        __name__=next_task.name,
-                        __cancel_on_exit__=True,
-                        __reraise_on_exit__=False,
-                        # starting a new task in the next tick ensures
-                        # updates from this tick are committed/streamed first
-                        __next_tick__=True,
-                    ),
-                )
-                # exceptions for call() tasks are raised into the parent task
-                # so we should not re-raise at the end of the tick
-                SKIP_RERAISE_SET.add(fut)
-                futures()[fut] = next_task  # type: ignore[index]
+                if sub := submit():
+                    fut = cast(
+                        asyncio.Future,
+                        sub(  # type: ignore[misc]
+                            arun_with_retry,
+                            next_task,  # type: ignore
+                            retry_policy,  # type: ignore
+                            stream=stream,  # type: ignore
+                            configurable={  # type: ignore
+                                CONFIG_KEY_CALL: partial(
+                                    _acall,
+                                    weakref.ref(next_task),
+                                    stream=stream,
+                                    futures=futures,
+                                    schedule_task=schedule_task,
+                                    submit=submit,
+                                    loop=loop,
+                                ),
+                            },
+                            __name__=next_task.name,
+                            __cancel_on_exit__=True,
+                            __reraise_on_exit__=False,
+                            # starting a new task in the next tick ensures
+                            # updates from this tick are committed/streamed first
+                            __next_tick__=True,
+                        ),
+                    )
+                    # exceptions for call() tasks are raised into the parent task
+                    # so we should not re-raise at the end of the tick
+                    SKIP_RERAISE_SET.add(fut)
+                    if futs := futures():
+                        futs[fut] = next_task  # type: ignore[index]
         if fut is not None:
             chain_future(fut, destination)
         else:

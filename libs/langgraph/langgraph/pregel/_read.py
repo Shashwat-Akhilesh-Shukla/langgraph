@@ -17,7 +17,7 @@ from langgraph.pregel.protocol import PregelProtocol
 from langgraph.types import CachePolicy, RetryPolicy
 
 READ_TYPE = Callable[[str | Sequence[str], bool], Any | dict[str, Any]]
-INPUT_CACHE_KEY_TYPE = tuple[Callable[..., Any], tuple[str, ...]]
+INPUT_CACHE_KEY_TYPE = tuple[Callable[..., Any] | None, tuple[str, ...]]
 
 
 class ChannelRead(RunnableCallable):
@@ -141,7 +141,7 @@ class PregelNode:
         writers: list[Runnable] | None = None,
         tags: list[str] | None = None,
         metadata: Mapping[str, Any] | None = None,
-        bound: Runnable[Any, Any] | None = None,
+        bound: Any = None,
         retry_policy: RetryPolicy | Sequence[RetryPolicy] | None = None,
         cache_policy: CachePolicy | None = None,
         subgraphs: Sequence[PregelProtocol] | None = None,
@@ -213,7 +213,7 @@ class PregelNode:
             return self.bound
 
     @cached_property
-    def input_cache_key(self) -> INPUT_CACHE_KEY_TYPE:  # type: ignore[return-value]
+    def input_cache_key(self) -> INPUT_CACHE_KEY_TYPE:
         """Get a cache key for the input to the node.
         This is used to avoid calculating the same input multiple times."""
         return (
@@ -229,7 +229,10 @@ class PregelNode:
         config: RunnableConfig | None = None,
         **kwargs: Any | None,
     ) -> Any:
-        self_config: RunnableConfig = {"metadata": self.metadata, "tags": list(self.tags) if self.tags else []}  # type: ignore[typeddict-item]
+        self_config: RunnableConfig = {
+            "metadata": dict(self.metadata) if self.metadata else {},
+            "tags": list(self.tags) if self.tags else [],
+        }
         return self.bound.invoke(
             input,
             merge_configs(self_config, config),
@@ -242,7 +245,10 @@ class PregelNode:
         config: RunnableConfig | None = None,
         **kwargs: Any | None,
     ) -> Any:
-        self_config: RunnableConfig = {"metadata": self.metadata, "tags": list(self.tags) if self.tags else []}  # type: ignore[typeddict-item]
+        self_config: RunnableConfig = {
+            "metadata": dict(self.metadata) if self.metadata else {},
+            "tags": list(self.tags) if self.tags else [],
+        }
         return await self.bound.ainvoke(
             input,
             merge_configs(self_config, config),

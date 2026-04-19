@@ -96,19 +96,19 @@ def merge_configs(*configs: RunnableConfig | None) -> RunnableConfig:
                 continue
             if key == "metadata":
                 if base_value := base.get(key):
-                    base[key] = {**base_value, **value}  # type: ignore
+                    base[key] = {**cast(dict, base_value), **cast(dict, value)}  # type: ignore
                 else:
-                    base[key] = value  # type: ignore[literal-required]
+                    base[key] = cast(dict, value)  # type: ignore[invalid-key]
             elif key == "tags":
                 if base_value := base.get(key):
                     base[key] = [*base_value, *value]  # type: ignore
                 else:
-                    base[key] = value  # type: ignore[literal-required]
+                    base[key] = value  # type: ignore[invalid-key]
             elif key == CONF:
                 if base_value := base.get(key):
-                    base[key] = {**base_value, **value}  # type: ignore[dict-item]
+                    base[key] = {**cast(dict, base_value), **cast(dict, value)}  # type: ignore[dict-item]
                 else:
-                    base[key] = value  # type: ignore
+                    base[key] = cast(dict, value)  # type: ignore
             elif key == "callbacks":
                 base_callbacks = base.get("callbacks")
                 # callbacks can be either None, list[handler] or manager
@@ -142,7 +142,7 @@ def merge_configs(*configs: RunnableConfig | None) -> RunnableConfig:
                 if config["recursion_limit"] != DEFAULT_RECURSION_LIMIT:
                     base["recursion_limit"] = config["recursion_limit"]
             else:
-                base[key] = config[key]  # type: ignore[literal-required]
+                base[key] = config[key]  # type: ignore[invalid-key]
     if CONF not in base:
         base[CONF] = {}  # type: ignore
     return base
@@ -304,7 +304,7 @@ def ensure_config(*configs: RunnableConfig | None) -> RunnableConfig:
                 if k == CONF:
                     empty[k] = cast(dict, v).copy()  # type: ignore
                 else:
-                    empty[k] = v  # type: ignore[literal-required]
+                    empty[k] = v  # type: ignore[invalid-key]
         for k, v in config.items():
             if _is_not_empty(v) and k not in CONFIG_KEYS:
                 empty[CONF][k] = v

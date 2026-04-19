@@ -149,8 +149,9 @@ def should_interrupt(
     seen = checkpoint["versions_seen"].get(INTERRUPT, {})
     # interrupt if any channel has been updated since last interrupt
     any_updates_since_prev_interrupt = any(
-        version > seen.get(chan, null_version)  # type: ignore[operator]
+        version > prev_version  # type: ignore[operator]
         for chan, version in checkpoint["channel_versions"].items()
+        if type(version) is type(prev_version := seen.get(chan, null_version))
     )
     # and any triggered node is in interrupt_nodes list
     return (
@@ -1068,9 +1069,9 @@ def _triggers(
                 return True
     else:
         for chan in proc.triggers:
-            if channels[chan].is_available() and versions.get(  # type: ignore[operator]
-                chan, null_version
-            ) > seen.get(chan, null_version):
+            v0 = versions.get(chan, null_version)
+            v1 = seen.get(chan, null_version)
+            if channels[chan].is_available() and type(v0) is type(v1) and v0 > v1:  # type: ignore[operator]
                 return True
     return False
 

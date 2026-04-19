@@ -1072,7 +1072,7 @@ class SyncPregelLoop(PregelLoop, AbstractContextManager):
             )
         else:
             self.checkpointer_get_next_version = increment
-            self._checkpointer_put_after_previous = None  # type: ignore[assignment]
+            self._checkpointer_put_after_previous = None  # type: ignore[invalid-assignment]
             self.checkpointer_put_writes = None
             self.checkpointer_put_writes_accepts_task_path = False
 
@@ -1194,11 +1194,10 @@ class SyncPregelLoop(PregelLoop, AbstractContextManager):
         self.step = self.checkpoint_metadata["step"] + 1
         self.stop = self.step + self.config["recursion_limit"] + 1
         self.checkpoint_previous_versions = self.checkpoint["channel_versions"].copy()
+        updated_channels = self.checkpoint.get("updated_channels")
         self.updated_channels = self._first(
             input_keys=self.input_keys,
-            updated_channels=set(self.checkpoint.get("updated_channels"))  # type: ignore[arg-type]
-            if self.checkpoint.get("updated_channels")
-            else None,
+            updated_channels=set(updated_channels) if updated_channels else None,
         )
 
         return self
@@ -1268,7 +1267,7 @@ class AsyncPregelLoop(PregelLoop, AbstractAsyncContextManager):
             )
         else:
             self.checkpointer_get_next_version = increment
-            self._checkpointer_put_after_previous = None  # type: ignore[assignment]
+            self._checkpointer_put_after_previous = None  # type: ignore[invalid-assignment]
             self.checkpointer_put_writes = None
             self.checkpointer_put_writes_accepts_task_path = False
 
@@ -1395,11 +1394,10 @@ class AsyncPregelLoop(PregelLoop, AbstractAsyncContextManager):
         self.step = self.checkpoint_metadata["step"] + 1
         self.stop = self.step + self.config["recursion_limit"] + 1
         self.checkpoint_previous_versions = self.checkpoint["channel_versions"].copy()
+        updated_channels = self.checkpoint.get("updated_channels")
         self.updated_channels = self._first(
             input_keys=self.input_keys,
-            updated_channels=set(self.checkpoint.get("updated_channels"))  # type: ignore[arg-type]
-            if self.checkpoint.get("updated_channels")
-            else None,
+            updated_channels=set(updated_channels) if updated_channels else None,
         )
 
         return self

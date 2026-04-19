@@ -13,14 +13,19 @@ from langgraph.managed.base import ManagedValueMapping, ManagedValueSpec
 LATEST_VERSION = 4
 
 
+from typing import cast
+
 def empty_checkpoint() -> Checkpoint:
-    return Checkpoint(  # type: ignore[typeddict-item]
-        v=LATEST_VERSION,
-        id=str(uuid6(clock_seq=-2)),
-        ts=datetime.now(timezone.utc).isoformat(),
-        channel_values={},
-        channel_versions={},
-        versions_seen={},
+    return cast(
+        Checkpoint,
+        {
+            "v": LATEST_VERSION,
+            "id": str(uuid6(clock_seq=-2)),
+            "ts": datetime.now(timezone.utc).isoformat(),
+            "channel_values": {},
+            "channel_versions": {},
+            "versions_seen": {},
+        },
     )
 
 

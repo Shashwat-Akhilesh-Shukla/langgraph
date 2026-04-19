@@ -34,6 +34,7 @@ from langgraph_sdk.schema import (
     Context,
     QueryParamTypes,
     ThreadState,
+    ThreadUpdateStateResponse,
 )
 from langgraph_sdk.schema import (
     Command as CommandSDK,
@@ -209,6 +210,7 @@ class RemoteGraph(PregelProtocol):
                 if isinstance(node_data, dict):
                     node_name = node_data.get("name", node_id)
                 else:
+                    base = {}  # type: ignore[invalid-key]
                     node_name = node_id
 
             nodes[node_id] = DrawableNode(
@@ -323,7 +325,7 @@ class RemoteGraph(PregelProtocol):
                     "checkpoint_map": state["checkpoint"].get("checkpoint_map", {}),
                 }
             },
-            metadata=CheckpointMetadata(**state["metadata"]),  # type: ignore[misc]
+            metadata=CheckpointMetadata(**(state.get("metadata") or {})),  # type: ignore[misc]
             created_at=state["created_at"],
             parent_config=(
                 {
@@ -347,18 +349,16 @@ class RemoteGraph(PregelProtocol):
         if config is None:
             return None
 
-        checkpoint = {}
+        configurable = config.get("configurable")
+        if not configurable or "thread_id" not in configurable:
+            return None
 
-        if "thread_id" in config["configurable"]:
-            checkpoint["thread_id"] = config["configurable"]["thread_id"]
-        if "checkpoint_ns" in config["configurable"]:
-            checkpoint["checkpoint_ns"] = config["configurable"]["checkpoint_ns"]
-        if "checkpoint_id" in config["configurable"]:
-            checkpoint["checkpoint_id"] = config["configurable"]["checkpoint_id"]
-        if "checkpoint_map" in config["configurable"]:
-            checkpoint["checkpoint_map"] = config["configurable"]["checkpoint_map"]
-
-        return checkpoint if checkpoint else None  # type: ignore[return-value]
+        return {
+            "thread_id": configurable["thread_id"],
+            "checkpoint_ns": configurable.get("checkpoint_ns", ""),
+            "checkpoint_id": configurable.get("checkpoint_id"),
+            "checkpoint_map": configurable.get("checkpoint_map"),
+        }
 
     def _get_config(self, checkpoint: Checkpoint) -> RunnableConfig:
         return {
@@ -590,7 +590,7 @@ class RemoteGraph(PregelProtocol):
         sync_client = self._validate_sync_client()
         merged_config = merge_configs(self.config, config)
 
-        response: dict = sync_client.threads.update_state(  # type: ignore[assignment]
+        response: ThreadUpdateStateResponse = sync_client.threads.update_state(
             thread_id=merged_config["configurable"]["thread_id"],
             values=values,
             as_node=as_node,
@@ -625,7 +625,7 @@ class RemoteGraph(PregelProtocol):
         client = self._validate_client()
         merged_config = merge_configs(self.config, config)
 
-        response: dict = await client.threads.update_state(  # type: ignore[assignment]
+        response: ThreadUpdateStateResponse = await client.threads.update_state(
             thread_id=merged_config["configurable"]["thread_id"],
             values=values,
             as_node=as_node,
@@ -842,7 +842,7 @@ class RemoteGraph(PregelProtocol):
                 yield chunk
 
     @overload
-    def astream(  # type: ignore
+    def astream(
         self,
         input: dict[str, Any] | Any,
         config: RunnableConfig | None = None,
@@ -875,7 +875,7 @@ class RemoteGraph(PregelProtocol):
         **kwargs: Any,
     ) -> AsyncIterator[dict[str, Any] | Any]: ...
 
-    async def astream(  # type: ignore
+    async def astream(
         self,
         input: dict[str, Any] | Any,
         config: RunnableConfig | None = None,

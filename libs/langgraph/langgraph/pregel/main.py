@@ -2433,7 +2433,7 @@ class Pregel(
             cache = self.cache
         if durability is None:
             durability = config.get(CONF, {}).get(CONFIG_KEY_DURABILITY, "async")
-        return (  # type: ignore
+        return (
             stream_modes,
             output_keys,
             interrupt_before,
@@ -2802,7 +2802,7 @@ class Pregel(
     ) -> AsyncIterator[StreamPart[StateT, OutputT]]: ...
 
     @overload
-    def astream(  # type: ignore
+    def astream(
         self,
         input: InputT | Command | None,
         config: RunnableConfig | None = None,
@@ -3688,7 +3688,7 @@ def _build_server_info(
     return None
 
 
-def _coerce_context(  # type: ignore
+def _coerce_context(
     context_schema: type[ContextT] | None, context: Any
 ) -> ContextT | None:
     """Coerce context input to the appropriate schema type.

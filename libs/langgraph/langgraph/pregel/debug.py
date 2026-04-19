@@ -40,11 +40,11 @@ def map_debug_tasks(tasks: Iterable[PregelExecutableTask]) -> Iterator[TaskPaylo
         if task.config is not None and TAG_HIDDEN in task.config.get("tags", []):
             continue
 
-        yield {  # type: ignore[typeddict-item]
+        yield {
             "id": task.id,
             "name": task.name,
             "input": task.input,
-            "triggers": task.triggers,
+            "triggers": list(task.triggers),
         }
 
 
@@ -157,25 +157,25 @@ def map_debug_checkpoint(
         "metadata": metadata,
         "next": [t.name for t in tasks],
         "tasks": [
-            {  # type: ignore[typeddict-item]
+            {
                 "id": t.id,
                 "name": t.name,
-                "error": t.error,
+                "error": str(t.error) if t.error else None,
                 "state": t.state,
             }
             if t.error
-            else {  # type: ignore[typeddict-item]
+            else {
                 "id": t.id,
                 "name": t.name,
                 "result": t.result,
-                "interrupts": tuple(asdict(i) for i in t.interrupts),
+                "interrupts": [asdict(i) for i in t.interrupts],
                 "state": t.state,
             }
             if t.result
-            else {  # type: ignore[typeddict-item]
+            else {
                 "id": t.id,
                 "name": t.name,
-                "interrupts": tuple(asdict(i) for i in t.interrupts),
+                "interrupts": [asdict(i) for i in t.interrupts],
                 "state": t.state,
             }
             for t in tasks_w_writes(tasks, pending_writes, task_states, output_keys)
