@@ -254,7 +254,7 @@ RunnableLike = (
 class RunnableCallable(Runnable):
     """A much simpler version of RunnableLambda that requires sync and async functions."""
 
-    def __init__(  # type: ignore
+    def __init__(
         self,
         func: Callable[..., Any | Runnable] | None,
         afunc: Callable[..., Awaitable[Any | Runnable]] | None = None,
@@ -498,7 +498,7 @@ def is_async_generator(
     )
 
 
-def coerce_to_runnable(  # type: ignore
+def coerce_to_runnable(
     thing: RunnableLike, *, name: str | None, trace: bool
 ) -> Runnable:
     """Coerce a runnable-like object into a Runnable.
@@ -539,7 +539,7 @@ class RunnableSeq(Runnable):
     LangGraph.
     """
 
-    def __init__(  # type: ignore
+    def __init__(
         self,
         *steps: RunnableLike,
         name: str | None = None,
@@ -865,7 +865,7 @@ class RunnableSeq(Runnable):
                         for h in run_manager.handlers:
                             if isinstance(h, _StreamingCallbackHandler):
                                 aiterator = h.tap_output_aiter(
-                                    run_manager.run_id, aiterator  # type: ignore
+                                    run_manager.run_id, aiterator
                                 )
                     # consume into final output
                     output = await _consume_aiter(aiterator)

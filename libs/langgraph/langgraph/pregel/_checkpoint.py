@@ -14,7 +14,7 @@ LATEST_VERSION = 4
 
 
 def empty_checkpoint() -> Checkpoint:
-    return Checkpoint(  # type: ignore
+    return Checkpoint(  # type: ignore[typeddict-item]
         v=LATEST_VERSION,
         id=str(uuid6(clock_seq=-2)),
         ts=datetime.now(timezone.utc).isoformat(),

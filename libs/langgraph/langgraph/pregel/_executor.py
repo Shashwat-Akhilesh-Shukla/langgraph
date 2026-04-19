@@ -87,7 +87,7 @@ class BackgroundExecutor(AbstractContextManager):
         else:
             self.tasks.pop(task)
 
-    def __enter__(self) -> Submit:  # type: ignore
+    def __enter__(self) -> Submit:  # type: ignore[return-type]
         return self.submit
 
     def __exit__(
@@ -180,7 +180,7 @@ class AsyncBackgroundExecutor(AbstractAsyncContextManager):
         except asyncio.CancelledError:
             self.tasks.pop(task)
 
-    async def __aenter__(self) -> Submit:  # type: ignore
+    async def __aenter__(self) -> Submit:  # type: ignore[return-type]
         return self.submit
 
     async def __aexit__(

@@ -66,10 +66,10 @@ class NamedBarrierValue(Generic[Value], BaseChannel[Value, Value, set[Value]]):
                 )
         return updated
 
-    def get(self) -> Value:  # type: ignore
+    def get(self) -> Value:  # type: ignore[return-value]
         if self.seen != self.names:
             raise EmptyChannelError()
-        return None
+        return None  # type: ignore[return-value]
 
     def is_available(self) -> bool:
         return self.seen == self.names
@@ -144,10 +144,10 @@ class NamedBarrierValueAfterFinish(
                 )
         return updated
 
-    def get(self) -> Value:  # type: ignore
+    def get(self) -> Value:  # type: ignore[return-value]
         if not self.finished or self.seen != self.names:
             raise EmptyChannelError()
-        return None
+        return None  # type: ignore[return-value]
 
     def is_available(self) -> bool:
         return self.finished and self.seen == self.names

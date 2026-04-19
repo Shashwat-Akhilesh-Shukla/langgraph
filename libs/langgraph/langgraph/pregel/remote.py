@@ -323,7 +323,7 @@ class RemoteGraph(PregelProtocol):
                     "checkpoint_map": state["checkpoint"].get("checkpoint_map", {}),
                 }
             },
-            metadata=CheckpointMetadata(**state["metadata"]),  # type: ignore
+            metadata=CheckpointMetadata(**state["metadata"]),  # type: ignore[misc]
             created_at=state["created_at"],
             parent_config=(
                 {
@@ -358,7 +358,7 @@ class RemoteGraph(PregelProtocol):
         if "checkpoint_map" in config["configurable"]:
             checkpoint["checkpoint_map"] = config["configurable"]["checkpoint_map"]
 
-        return checkpoint if checkpoint else None  # type: ignore
+        return checkpoint if checkpoint else None  # type: ignore[return-value]
 
     def _get_config(self, checkpoint: Checkpoint) -> RunnableConfig:
         return {
@@ -590,7 +590,7 @@ class RemoteGraph(PregelProtocol):
         sync_client = self._validate_sync_client()
         merged_config = merge_configs(self.config, config)
 
-        response: dict = sync_client.threads.update_state(  # type: ignore
+        response: dict = sync_client.threads.update_state(  # type: ignore[assignment]
             thread_id=merged_config["configurable"]["thread_id"],
             values=values,
             as_node=as_node,
@@ -625,7 +625,7 @@ class RemoteGraph(PregelProtocol):
         client = self._validate_client()
         merged_config = merge_configs(self.config, config)
 
-        response: dict = await client.threads.update_state(  # type: ignore
+        response: dict = await client.threads.update_state(  # type: ignore[assignment]
             thread_id=merged_config["configurable"]["thread_id"],
             values=values,
             as_node=as_node,
@@ -687,7 +687,7 @@ class RemoteGraph(PregelProtocol):
         return (updated_stream_modes, requested_stream_modes, req_single, stream)
 
     @overload
-    def stream(  # type: ignore
+    def stream(  # type: ignore[override]
         self,
         input: dict[str, Any] | Any,
         config: RunnableConfig | None = None,
@@ -720,7 +720,7 @@ class RemoteGraph(PregelProtocol):
         **kwargs: Any,
     ) -> Iterator[dict[str, Any] | Any]: ...
 
-    def stream(  # type: ignore
+    def stream(  # type: ignore[override]
         self,
         input: dict[str, Any] | Any,
         config: RunnableConfig | None = None,

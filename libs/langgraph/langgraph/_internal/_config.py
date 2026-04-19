@@ -58,9 +58,9 @@ def patch_configurable(
 
 def patch_checkpoint_map(
     config: RunnableConfig | None, metadata: CheckpointMetadata | None
-) -> RunnableConfig:  # type: ignore
+) -> RunnableConfig:
     if config is None:
-        return config
+        return {}
     elif parents := (metadata.get("parents") if metadata else None):
         conf = config[CONF]
         return patch_configurable(
@@ -281,9 +281,9 @@ def ensure_config(*configs: RunnableConfig | None) -> RunnableConfig:
     Returns:
         RunnableConfig: The merged and ensured config.
     """
-    empty = RunnableConfig(  # type: ignore
+    empty = RunnableConfig(
         tags=[],
-        metadata=ChainMap(),
+        metadata=dict(),
         callbacks=None,
         recursion_limit=DEFAULT_RECURSION_LIMIT,
         configurable={},

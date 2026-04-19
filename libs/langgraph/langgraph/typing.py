@@ -13,7 +13,7 @@ __all__ = (
     "ContextT",
 )
 
-StateT = TypeVar("StateT", bound=StateLike)  # type: ignore
+StateT = TypeVar("StateT", bound=StateLike)
 """Type variable used to represent the state in a graph."""
 
 StateT_co = TypeVar("StateT_co", bound=StateLike, covariant=True)
@@ -30,13 +30,13 @@ ContextT_contra = TypeVar(
     "ContextT_contra", bound=StateLike | None, contravariant=True, default=None
 )
 
-InputT = TypeVar("InputT", bound=StateLike, default=StateT)  # type: ignore
+InputT = TypeVar("InputT", bound=StateLike, default=StateT)
 """Type variable used to represent the input to a `StateGraph`.
 
 Defaults to `StateT`.
 """
 
-OutputT = TypeVar("OutputT", bound=StateLike, default=StateT)  # type: ignore
+OutputT = TypeVar("OutputT", bound=StateLike, default=StateT)
 """Type variable used to represent the output of a `StateGraph`.
 
 Defaults to `StateT`.

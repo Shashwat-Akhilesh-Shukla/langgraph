@@ -122,13 +122,13 @@ class BinaryOperatorAggregate(Generic[Value], BaseChannel[Value, Value, Value]):
                 self.value = self.operator(self.value, value)  # type: ignore
         return True
 
-    def get(self) -> Value:  # type: ignore
+    def get(self) -> Value:  # type: ignore[return-value]
         if self.value is MISSING:
             raise EmptyChannelError()
-        return self.value
+        return self.value  # type: ignore[return-value]
 
     def is_available(self) -> bool:
         return self.value is not MISSING
 
-    def checkpoint(self) -> Value:  # type: ignore
-        return self.value
+    def checkpoint(self) -> Value:  # type: ignore[return-value]
+        return self.value  # type: ignore[return-value]

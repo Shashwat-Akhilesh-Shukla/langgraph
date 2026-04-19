@@ -993,9 +993,9 @@ def prepare_push_task_send(
                 run_id=str(rid) if (rid := config.get("run_id")) else None,
             ),
         )
-        additional_config: RunnableConfig = {  # type: ignore
+        additional_config: RunnableConfig = {
             "metadata": metadata,
-            "tags": proc.tags,
+            "tags": list(proc.tags) if proc.tags else [],
         }
         return PregelExecutableTask(
             packet.node,
@@ -1048,7 +1048,7 @@ def prepare_push_task_send(
 
 def checkpoint_null_version(
     checkpoint: Checkpoint,
-) -> V | None:  # type: ignore
+) -> V | None:
     """Get the null version for the checkpoint, if available."""
     for version in checkpoint["channel_versions"].values():
         return type(version)()

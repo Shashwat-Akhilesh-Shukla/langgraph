@@ -105,7 +105,7 @@ def _warn_invalid_state_schema(schema: type[Any] | Any) -> None:
     )
 
 
-def _get_node_name(node: StateNode[Any, ContextT]) -> str:  # type: ignore
+def _get_node_name(node: StateNode[Any, ContextT]) -> str:
     try:
         return getattr(node, "__name__", node.__class__.__name__)
     except AttributeError:
@@ -197,7 +197,7 @@ class StateGraph(Generic[StateT, ContextT, InputT, OutputT]):
     input_schema: type[InputT]
     output_schema: type[OutputT]
 
-    def __init__(  # type: ignore
+    def __init__(
         self,
         state_schema: type[StateT],
         context_schema: type[ContextT] | None = None,
@@ -428,7 +428,7 @@ class StateGraph(Generic[StateT, ContextT, InputT, OutputT]):
         ...
 
     @overload
-    def add_node(  # type: ignore
+    def add_node(
         self,
         node: str,
         action: StateNode[NodeInputT, ContextT],
@@ -785,7 +785,7 @@ class StateGraph(Generic[StateT, ContextT, InputT, OutputT]):
 
         return self
 
-    def add_edge(self, start_key: str | list[str], end_key: str) -> Self:  # type: ignore
+    def add_edge(self, start_key: str | list[str], end_key: str) -> Self:
         """Add a directed edge from the start node (or list of start nodes) to the end node.
 
         When a single start node is provided, the graph will wait for that node to complete

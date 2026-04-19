@@ -617,7 +617,7 @@ class PregelLoop:
 
         return hanging_interrupts
 
-    def _first(  # type: ignore
+    def _first(  # type: ignore[return-type]
         self, *, input_keys: str | Sequence[str], updated_channels: set[str] | None
     ) -> set[str] | None:
         # Resuming from a previous checkpoint requires two things:
@@ -928,7 +928,7 @@ class PregelLoop:
             # save final output
             self.output = read_channels(self.channels, self.output_keys)
 
-    def _emit(  # type: ignore
+    def _emit(  # type: ignore[valid-type]
         self,
         mode: StreamMode,
         values: Callable[P, Iterator[Any]],

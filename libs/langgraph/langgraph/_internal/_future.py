@@ -124,7 +124,7 @@ def _chain_future(source: AnyFuture, destination: AnyFuture) -> None:
     source.add_done_callback(_call_set_state)
 
 
-def chain_future(source: AnyFuture, destination: AnyFuture) -> AnyFuture:  # type: ignore
+def chain_future(source: AnyFuture, destination: AnyFuture) -> AnyFuture:
     # adapted from asyncio.run_coroutine_threadsafe
     try:
         _chain_future(source, destination)
@@ -163,12 +163,12 @@ def _ensure_future(
 
     try:
         if CONTEXT_NOT_SUPPORTED:
-            return loop.create_task(coro_or_future, name=name)  # type: ignore
+            return loop.create_task(coro_or_future, name=name)  # type: ignore[return-type]
         elif EAGER_NOT_SUPPORTED or lazy:
-            return loop.create_task(coro_or_future, name=name, context=context)
+            return loop.create_task(coro_or_future, name=name, context=context)  # type: ignore[return-type]
         else:
             return asyncio.eager_task_factory(
-                loop, coro_or_future, name=name, context=context
+                loop, coro_or_future, name=name, context=context  # type: ignore[return-type]
             )
     except RuntimeError:
         if not called_wrap_awaitable:

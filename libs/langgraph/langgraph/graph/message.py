@@ -308,7 +308,7 @@ class MessagesState(TypedDict):
     messages: Annotated[list[AnyMessage], add_messages]
 
 
-def _format_messages(messages: Sequence[BaseMessage]) -> list[BaseMessage]:  # type: ignore
+def _format_messages(messages: Sequence[BaseMessage]) -> list[BaseMessage]:
     try:
         from langchain_core.messages import convert_to_openai_messages
     except ImportError:

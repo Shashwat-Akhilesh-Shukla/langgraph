@@ -146,7 +146,7 @@ class TaskPayload(TypedDict):
     """Name of the node being executed."""
     input: Any
     """Input data passed to the task."""
-    triggers: list[str]  # type: ignore
+    triggers: list[str]
     """List of triggers that caused this task to be executed (e.g. channel writes)."""
 
 
@@ -179,11 +179,11 @@ class CheckpointTask(TypedDict):
     """Unique identifier for this task."""
     name: str
     """Name of the node being executed."""
-    error: NotRequired[str]  # type: ignore
+    error: NotRequired[str]
     """Error message, present only if the task failed."""
     result: NotRequired[Any]
     """Result of the task, present only if the task completed successfully."""
-    interrupts: NotRequired[list[dict]]  # type: ignore
+    interrupts: NotRequired[list[dict]]
     """List of interrupts, present when the task has been interrupted or completed."""
     state: StateSnapshot | RunnableConfig | None
     """Snapshot of the subgraph state, or a `RunnableConfig` pointing to it. `None` if not a subgraph."""
@@ -202,7 +202,7 @@ class CheckpointPayload(TypedDict, Generic[StateT]):
     """Names of the nodes scheduled to execute next."""
     parent_config: RunnableConfig | None
     """Configuration of the parent checkpoint, or `None` if this is the first checkpoint."""
-    tasks: list[CheckpointTask]  # type: ignore
+    tasks: list[CheckpointTask]
     """List of tasks associated with this checkpoint."""
 
 
@@ -684,7 +684,7 @@ class Command(Generic[N], ToolOutputMixin):  # type: ignore
         )
         return f"Command({contents})"
 
-    def _update_as_tuples(self) -> Sequence[tuple[str, Any]]:  # type: ignore
+    def _update_as_tuples(self) -> Sequence[tuple[str, Any]]:  # type: ignore[return-value]
         if isinstance(self.update, dict):
             return list(self.update.items())
         elif isinstance(self.update, (list, tuple)) and all(
